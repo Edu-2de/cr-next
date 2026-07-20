@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
+import { FiMenu, FiX } from "react-icons/fi";
 import { tv } from "tailwind-variants";
 import { Text } from "@/components/ui/Text";
 import { WHATSAPP_HREF, WHATSAPP_NUMBER } from "@/lib/business-info";
@@ -15,8 +16,7 @@ const headerStyles = tv({
     pill: "flex w-full items-center justify-between rounded-full border px-5 py-3 backdrop-blur-xl transition-colors duration-300 sm:px-7 sm:py-4",
     nav: "hidden items-center gap-1 sm:flex sm:gap-2",
     wordmark: "shrink-0 whitespace-nowrap transition-colors duration-300",
-    menuButton: "relative z-10 flex size-8 shrink-0 flex-col items-center justify-center gap-[5px] sm:hidden",
-    menuBar: "h-px w-5 rounded-full transition-colors duration-300",
+    menuButton: "relative z-10 flex size-8 shrink-0 items-center justify-center sm:hidden",
     // Full-screen editorial takeover — large numbered links instead of a
     // small dropdown pill, matching the display-type scale used elsewhere
     // on the page (Hero headline, section watermarks) rather than reading
@@ -27,7 +27,7 @@ const headerStyles = tv({
     // AnimatePresence here intermittently left this panel's DOM node stuck
     // fully opaque and un-dismissable (same failure LoadingScreen.tsx hit).
     mobilePanel:
-      "fixed inset-0 z-0 flex flex-col justify-center overflow-hidden bg-ink-950 px-8 pt-20 pb-10 transition-opacity duration-300 ease-out sm:hidden",
+      "fixed inset-0 z-0 flex flex-col justify-center overflow-hidden bg-ink-950 px-8 pt-36 pb-10 transition-opacity duration-300 ease-out sm:hidden",
     mobilePanelGrain: "bg-grain pointer-events-none absolute inset-0",
     mobileNav: "relative flex flex-col",
     mobileLinkRow:
@@ -51,7 +51,6 @@ export function Header() {
     nav,
     wordmark,
     menuButton,
-    menuBar,
     mobilePanel,
     mobilePanelGrain,
     mobileNav,
@@ -122,27 +121,11 @@ export function Header() {
             onClick={() => setMenuOpen((open) => !open)}
             className={menuButton()}
           >
-            <span
-              className={menuBar({
-                class: [
-                  onDark ? "bg-white" : "bg-ink-950",
-                  menuOpen ? "translate-y-[3px] rotate-45" : "",
-                ],
-              })}
-            />
-            <span
-              className={menuBar({
-                class: [onDark ? "bg-white" : "bg-ink-950", menuOpen ? "opacity-0" : ""],
-              })}
-            />
-            <span
-              className={menuBar({
-                class: [
-                  onDark ? "bg-white" : "bg-ink-950",
-                  menuOpen ? "-translate-y-[3px] -rotate-45" : "",
-                ],
-              })}
-            />
+            {menuOpen ? (
+              <FiX size={20} className={onDark ? "text-white" : "text-ink-950"} />
+            ) : (
+              <FiMenu size={20} className={onDark ? "text-white" : "text-ink-950"} />
+            )}
           </button>
         </div>
 

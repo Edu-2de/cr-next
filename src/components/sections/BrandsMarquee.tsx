@@ -64,7 +64,7 @@ function MarqueeRow({
   isDesktop: boolean;
   hoveredId: string | null;
   onBrandHover: (brand: Brand | null) => void;
-  onBrandTap: (brand: Brand, event: React.MouseEvent) => void;
+  onBrandTap: (brand: Brand, event: React.MouseEvent<HTMLDivElement>) => void;
 }) {
   const trackRef = useRef<HTMLDivElement | null>(null);
   const tweenRef = useRef<gsap.core.Tween | null>(null);
@@ -187,15 +187,19 @@ export function BrandsMarquee() {
     quickY.current?.(event.clientY);
   }
 
-  function handleBrandTap(brand: Brand, event: React.MouseEvent) {
-    // Instant placement (not the smoothed quickTo used for mouse-follow) —
-    // there's no continuous pointer motion to ease from on tap. Clamped
-    // inside the viewport (the popup is centered on this point via negative
-    // margins) since a badge tapped near a narrow mobile screen's edge would
-    // otherwise center it half off-screen.
+  function handleBrandTap(brand: Brand, event: React.MouseEvent<HTMLDivElement>) {
+    // Centered on the tapped badge's own rect, not event.clientX/clientY —
+    // some mobile browsers report a synthetic click's coordinates as 0,0
+    // (or otherwise unreliable) when it's dispatched from a touchend rather
+    // than a real pointer move, which pinned the popup near the top-left
+    // corner regardless of which badge was tapped. Still clamped inside the
+    // viewport (the popup is centered on this point via negative margins)
+    // since a badge near a narrow mobile screen's edge would otherwise
+    // center it half off-screen.
+    const rect = event.currentTarget.getBoundingClientRect();
     const half = CURSOR_SIZE_PX / 2 + CURSOR_EDGE_PADDING_PX;
-    const x = gsap.utils.clamp(half, window.innerWidth - half, event.clientX);
-    const y = gsap.utils.clamp(half, window.innerHeight - half, event.clientY);
+    const x = gsap.utils.clamp(half, window.innerWidth - half, rect.left + rect.width / 2);
+    const y = gsap.utils.clamp(half, window.innerHeight - half, rect.top + rect.height / 2);
     gsap.set(cursorRef.current, { x, y });
     setHovered((current) => (current?.id === brand.id ? null : brand));
   }
