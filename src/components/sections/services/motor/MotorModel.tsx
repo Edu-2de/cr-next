@@ -6,7 +6,12 @@ import { useMotorParticles } from "./useMotorParticles";
 
 const motorModelStyles = tv({
   slots: {
-    container: "relative h-full w-full",
+    // touch-none: without it, a touch drag over the canvas just scrolls the
+    // page (pointermove fires but the gesture is consumed as a scroll) —
+    // this is a small, self-contained widget, so trading page-scroll here
+    // for the same disperse-on-drag interaction mouse users get is the
+    // right call rather than the touch experience never really working.
+    container: "relative h-full w-full touch-none",
     canvasWrap: "absolute inset-0 [&>canvas]:h-full [&>canvas]:w-full",
   },
 });

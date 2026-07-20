@@ -88,6 +88,10 @@ export function useMotorParticles(
     }
     container.addEventListener("pointermove", updatePointerNDC);
     container.addEventListener("pointerleave", handlePointerLeave);
+    // Touch has no hover "leave" — a lifted/cancelled finger needs the same
+    // reset so the disperse doesn't stay pinned at the last touch point.
+    container.addEventListener("pointerup", handlePointerLeave);
+    container.addEventListener("pointercancel", handlePointerLeave);
 
     const raycaster = new THREE.Raycaster();
     const depthPlane = new THREE.Plane(new THREE.Vector3(0, 0, 1), 0);
@@ -297,6 +301,8 @@ export function useMotorParticles(
       intersectionObserver.disconnect();
       container.removeEventListener("pointermove", updatePointerNDC);
       container.removeEventListener("pointerleave", handlePointerLeave);
+      container.removeEventListener("pointerup", handlePointerLeave);
+      container.removeEventListener("pointercancel", handlePointerLeave);
       renderer.dispose();
       wrap.removeChild(renderer.domElement);
       if (particles) {

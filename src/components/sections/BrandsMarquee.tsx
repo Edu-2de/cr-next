@@ -1,11 +1,15 @@
 "use client";
 
 import gsap from "gsap";
+import { Draggable } from "gsap/Draggable";
+import { InertiaPlugin } from "gsap/InertiaPlugin";
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import { tv } from "tailwind-variants";
 import { Text } from "@/components/ui/Text";
 import { useIsDesktop } from "@/hooks/ui/useIsDesktop";
+
+gsap.registerPlugin(Draggable, InertiaPlugin);
 import abbImg from "@/assets/images/brand-abb-logo.png";
 import sewImg from "@/assets/images/brand-sew-eurodrive-logo.png";
 import kohlbachImg from "@/assets/images/brand-kohlbach-logo.jpg";
@@ -30,14 +34,13 @@ export const BRANDS: Brand[] = [
 // otherwise the crawl runs dry near the wrap point on wide screens.
 const REPEAT_COUNT = 4;
 const TRACK_ITEMS = Array.from({ length: REPEAT_COUNT }, () => BRANDS).flat();
-const LOOP_SHIFT_PERCENT = 100 / REPEAT_COUNT;
 
 const ROW_DURATION_S = 50;
 const CURSOR_SIZE_PX = 128;
 
 const brandsMarqueeStyles = tv({
   slots: {
-    rowTrack: "flex w-max gap-4",
+    rowTrack: "flex w-max cursor-grab gap-4 active:cursor-grabbing",
     badge: "shrink-0 cursor-none rounded-full border border-ink-950/15 px-8 py-4 sm:px-10 sm:py-5",
     root: "relative overflow-hidden py-16",
     rows: "flex flex-col gap-4",
@@ -68,15 +71,46 @@ function MarqueeRow({
   useEffect(() => {
     const track = trackRef.current;
     if (!track) return;
-    // Moving right = animate FROM -shift% TO 0% (xPercent increasing).
-    // Moving left = animate FROM 0% TO -shift% (xPercent decreasing).
-    tweenRef.current = gsap.fromTo(
-      track,
-      { xPercent: reverse ? 0 : -LOOP_SHIFT_PERCENT },
-      { xPercent: reverse ? -LOOP_SHIFT_PERCENT : 0, duration: ROW_DURATION_S, ease: "none", repeat: -1 },
-    );
+
+    // x in pixels (not xPercent) so the auto-crawl and Draggable — which
+    // only understands x/y in px — can drive the same tween/wrap instead of
+    // fighting over two different coordinate systems.
+    const oneSetWidth = track.scrollWidth / REPEAT_COUNT;
+    const wrap = gsap.utils.wrap(-oneSetWidth, 0);
+    gsap.set(track, { x: reverse ? 0 : -oneSetWidth });
+
+    // Moving right = FROM -oneSetWidth TO 0. Moving left = the reverse.
+    const tween = gsap.to(track, {
+      x: reverse ? `-=${oneSetWidth}` : `+=${oneSetWidth}`,
+      duration: ROW_DURATION_S,
+      ease: "none",
+      repeat: -1,
+      modifiers: { x: gsap.utils.unitize(wrap) },
+    });
+    tweenRef.current = tween;
+
+    // Auto-crawl + drag on every input type: Draggable writes `x` directly
+    // during a drag/throw, bypassing the tween's own wrap modifier, so the
+    // same wrap() is applied by hand in onDrag/onThrowUpdate too.
+    const [draggable] = Draggable.create(track, {
+      type: "x",
+      inertia: true,
+      onDragStart: () => tween.pause(),
+      onDrag: function (this: Draggable) {
+        gsap.set(track, { x: wrap(this.x) });
+      },
+      onThrowUpdate: function (this: Draggable) {
+        gsap.set(track, { x: wrap(this.x) });
+      },
+      onThrowComplete: () => tween.play(),
+      onDragEnd: function (this: Draggable) {
+        if (!this.isThrowing) tween.play();
+      },
+    });
+
     return () => {
-      tweenRef.current?.kill();
+      tween.kill();
+      draggable.kill();
     };
   }, [reverse]);
 
