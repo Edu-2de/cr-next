@@ -1,14 +1,9 @@
 "use client";
 
-import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { useEffect, useRef } from "react";
 import { Text } from "@/components/ui/Text";
 import { PAPER } from "@/lib/palette";
-import { remap } from "../../engineering/scrollUtils";
+import { useMotorIntroAnimation } from "@/hooks/useMotorIntroAnimation";
 import { MotorModel } from "./MotorModel";
-
-gsap.registerPlugin(ScrollTrigger);
 
 // Pinned sequence: a cube of particles forms into the motor, then slides
 // into its side slot as the text fades in beside it — centered as one unit.
@@ -26,70 +21,10 @@ const SLIDE_END = (FORM_VH + SLIDE_VH) / TOTAL_VH;
 // past this formation, not partway into it.
 export const MOTOR_INTRO_TOTAL_VH = TOTAL_VH;
 
-const FORM_EASE = gsap.parseEase("sine.inOut");
-const SLIDE_EASE = gsap.parseEase("sine.inOut");
-
 const PAGE_BG_COLOR = PAPER;
 
 export function MotorIntro() {
-  const outerRef = useRef<HTMLDivElement | null>(null);
-  const motorBoxRef = useRef<HTMLDivElement | null>(null);
-  const textRef = useRef<HTMLDivElement | null>(null);
-  const progressRef = useRef(0);
-  const formProgressRef = useRef(0);
-  const centerOffsetRef = useRef(0);
-
-  useEffect(() => {
-    const trigger = ScrollTrigger.create({
-      trigger: outerRef.current,
-      start: "top top",
-      end: "bottom bottom",
-      scrub: true,
-      onUpdate: (self) => {
-        progressRef.current = self.progress;
-      },
-    });
-    return () => trigger.kill();
-  }, []);
-
-  // Distance (px) from viewport center, measured with any transform
-  // cleared first so a resize mid-slide can't bake in a stale offset.
-  useEffect(() => {
-    function measure() {
-      const box = motorBoxRef.current;
-      if (!box) return;
-      const prevTransform = box.style.transform;
-      box.style.transform = "";
-      const rect = box.getBoundingClientRect();
-      box.style.transform = prevTransform;
-      centerOffsetRef.current = window.innerWidth / 2 - (rect.left + rect.width / 2);
-    }
-    measure();
-    window.addEventListener("resize", measure);
-    return () => window.removeEventListener("resize", measure);
-  }, []);
-
-  useEffect(() => {
-    function tick() {
-      const progress = progressRef.current;
-      const formT = FORM_EASE(remap(progress, 0, FORM_END, 0, 1));
-      const slideT = SLIDE_EASE(remap(progress, FORM_END, SLIDE_END, 0, 1));
-
-      formProgressRef.current = formT;
-
-      if (motorBoxRef.current) {
-        const offset = centerOffsetRef.current * (1 - slideT);
-        motorBoxRef.current.style.transform = offset ? `translateX(${offset}px)` : "";
-      }
-
-      if (textRef.current) {
-        textRef.current.style.opacity = String(slideT);
-        textRef.current.style.transform = `translateY(${(1 - slideT) * 16}px)`;
-      }
-    }
-    gsap.ticker.add(tick);
-    return () => gsap.ticker.remove(tick);
-  }, []);
+  const { outerRef, motorBoxRef, textRef, formProgressRef } = useMotorIntroAnimation(FORM_END, SLIDE_END);
 
   return (
     <div ref={outerRef} className="relative z-10" style={{ height: `${TOTAL_VH}vh` }}>
