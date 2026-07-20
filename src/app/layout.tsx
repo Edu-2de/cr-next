@@ -137,11 +137,7 @@ export default function RootLayout({
       className={html({ class: `${geistSans.variable} ${geistMono.variable} ${spaceGrotesk.variable}` })}
     >
       <body className={body()}>
-        <script
-          type="application/ld+json"
-          // eslint-disable-next-line react/no-danger -- static, locally-built object, no user input
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(STRUCTURED_DATA) }}
-        />
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(STRUCTURED_DATA) }} />
         <LenisProvider>{children}</LenisProvider>
       </body>
     </html>
