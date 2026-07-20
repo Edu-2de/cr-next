@@ -8,13 +8,13 @@ import { useEffect, useRef, useState } from "react";
 import { tv } from "tailwind-variants";
 import { Text } from "@/components/ui/Text";
 import { useIsDesktop } from "@/hooks/ui/useIsDesktop";
-
-gsap.registerPlugin(Draggable, InertiaPlugin);
 import abbImg from "@/assets/images/brand-abb-logo.png";
 import sewImg from "@/assets/images/brand-sew-eurodrive-logo.png";
 import kohlbachImg from "@/assets/images/brand-kohlbach-logo.jpg";
 import mercosulImg from "@/assets/images/brand-mercosul-logo.png";
 import wegImg from "@/assets/images/brand-weg-logo.jpg";
+
+gsap.registerPlugin(Draggable, InertiaPlugin);
 
 // Two infinite-crawl rows (top drifting right, bottom left), GSAP-driven
 // rather than CSS @keyframes since globals.css forces CSS animation
@@ -37,6 +37,7 @@ const TRACK_ITEMS = Array.from({ length: REPEAT_COUNT }, () => BRANDS).flat();
 
 const ROW_DURATION_S = 50;
 const CURSOR_SIZE_PX = 128;
+const CURSOR_EDGE_PADDING_PX = 12;
 
 const brandsMarqueeStyles = tv({
   slots: {
@@ -188,8 +189,14 @@ export function BrandsMarquee() {
 
   function handleBrandTap(brand: Brand, event: React.MouseEvent) {
     // Instant placement (not the smoothed quickTo used for mouse-follow) —
-    // there's no continuous pointer motion to ease from on tap.
-    gsap.set(cursorRef.current, { x: event.clientX, y: event.clientY });
+    // there's no continuous pointer motion to ease from on tap. Clamped
+    // inside the viewport (the popup is centered on this point via negative
+    // margins) since a badge tapped near a narrow mobile screen's edge would
+    // otherwise center it half off-screen.
+    const half = CURSOR_SIZE_PX / 2 + CURSOR_EDGE_PADDING_PX;
+    const x = gsap.utils.clamp(half, window.innerWidth - half, event.clientX);
+    const y = gsap.utils.clamp(half, window.innerHeight - half, event.clientY);
+    gsap.set(cursorRef.current, { x, y });
     setHovered((current) => (current?.id === brand.id ? null : brand));
   }
 
