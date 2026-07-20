@@ -41,15 +41,23 @@ export function useScrollAccordion(itemCount: number, scrollDriven: boolean) {
   }, []);
 
   // Resets to item 0 whenever the interaction mode itself flips (scroll-
-  // driven <-> tap, e.g. a viewport crossing the desktop breakpoint) — done
-  // during render, React's documented way to "adjust state when a prop
-  // changes", instead of a setState called synchronously in an effect body.
-  const prevScrollDrivenRef = useRef(scrollDriven);
-  if (prevScrollDrivenRef.current !== scrollDriven) {
-    prevScrollDrivenRef.current = scrollDriven;
-    revealedIndexRef.current = 0;
+  // driven <-> tap, e.g. a viewport crossing the desktop breakpoint).
+  // React's documented "adjust state when a prop changes" pattern — setState
+  // called during render, guarded by comparing against a *state* mirror of
+  // the previous prop — not a ref: refs can't be read or written during
+  // render (only in effects/handlers), so the comparison itself has to live
+  // in state for this to run here instead of in an effect body.
+  const [prevScrollDriven, setPrevScrollDriven] = useState(scrollDriven);
+  if (prevScrollDriven !== scrollDriven) {
+    setPrevScrollDriven(scrollDriven);
     if (activeIndex !== 0) setActiveIndex(0);
   }
+
+  // revealedIndexRef is a ref (not state) purely to guard replaying the
+  // title-reveal animation — mutating it belongs in an effect, not render.
+  useEffect(() => {
+    revealedIndexRef.current = 0;
+  }, [scrollDriven]);
 
   useEffect(() => {
     if (!scrollDriven) return;
