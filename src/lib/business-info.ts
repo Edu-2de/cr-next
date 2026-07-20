@@ -1,15 +1,5 @@
-// Real, verified CR Mesquita business facts, single source of truth — used
-// by the Hero WhatsApp link, the Sobre section's Google Maps embed, and the
-// Footer. Do not re-derive these from CR.jpg (the factory-facade photo) or
-// guess new ones; they were confirmed either directly by the user or by
-// reading the physical signage in that photo at full resolution:
-// - WHATSAPP_NUMBER: confirmed directly by the user.
-// - PHONE_NUMBER, WEBSITE_URL: read off the signage in CR.jpg (six-times
-//   upscaled with nearest-neighbor interpolation for a clean read — the
-//   raw photo is only 284x160, too low-res to read reliably at native size).
-// - MAPS_PLACE_URL: the Google Maps place link the user supplied directly.
-// - FOUNDED_YEAR: from the "50 ANOS · 1975" laurel seal baked into the real
-//   company logo (app/assets/images/logo.png).
+// Single source of truth for real CR Mesquita business facts — shared by the
+// Hero WhatsApp link, the About section's map embed, and the Footer.
 export const WHATSAPP_NUMBER = "(51) 98342-2322";
 export const WHATSAPP_HREF = "https://wa.me/5551983422322";
 

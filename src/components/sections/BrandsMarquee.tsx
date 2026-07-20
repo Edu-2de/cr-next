@@ -1,0 +1,129 @@
+"use client";
+
+import gsap from "gsap";
+import Image from "next/image";
+import { useEffect, useRef, useState } from "react";
+import { Text } from "@/components/ui/Text";
+import abbImg from "@/assets/images/brand-abb-logo.png";
+import sewImg from "@/assets/images/brand-sew-eurodrive-logo.png";
+import kohlbachImg from "@/assets/images/brand-kohlbach-logo.jpg";
+import mercosulImg from "@/assets/images/brand-mercosul-logo.png";
+import wegImg from "@/assets/images/brand-weg-logo.jpg";
+
+// Two infinite-crawl rows (top drifting right, bottom left), GSAP-driven
+// rather than CSS @keyframes since globals.css forces CSS animation
+// durations to ~0 under prefers-reduced-motion. Rendered in both Products
+// and Services, so it lives here rather than in either section's folder.
+export type Brand = { id: string; name: string; src: typeof abbImg };
+
+export const BRANDS: Brand[] = [
+  { id: "abb", name: "ABB", src: abbImg },
+  { id: "sew", name: "SEW Eurodrive", src: sewImg },
+  { id: "kohlbach", name: "Kohlbach", src: kohlbachImg },
+  { id: "mercosul", name: "Mercosul", src: mercosulImg },
+  { id: "weg", name: "WEG", src: wegImg },
+];
+
+// 4 repeats (not 2) so a full repeat's width always exceeds the viewport —
+// otherwise the crawl runs dry near the wrap point on wide screens.
+const REPEAT_COUNT = 4;
+const TRACK_ITEMS = Array.from({ length: REPEAT_COUNT }, () => BRANDS).flat();
+const LOOP_SHIFT_PERCENT = 100 / REPEAT_COUNT;
+
+const ROW_DURATION_S = 50;
+const CURSOR_SIZE_PX = 128;
+
+function MarqueeRow({
+  reverse,
+  onBrandHover,
+}: {
+  reverse: boolean;
+  onBrandHover: (brand: Brand | null) => void;
+}) {
+  const trackRef = useRef<HTMLDivElement | null>(null);
+  const tweenRef = useRef<gsap.core.Tween | null>(null);
+
+  useEffect(() => {
+    const track = trackRef.current;
+    if (!track) return;
+    // Moving right = animate FROM -shift% TO 0% (xPercent increasing).
+    // Moving left = animate FROM 0% TO -shift% (xPercent decreasing).
+    tweenRef.current = gsap.fromTo(
+      track,
+      { xPercent: reverse ? 0 : -LOOP_SHIFT_PERCENT },
+      { xPercent: reverse ? -LOOP_SHIFT_PERCENT : 0, duration: ROW_DURATION_S, ease: "none", repeat: -1 },
+    );
+    return () => {
+      tweenRef.current?.kill();
+    };
+  }, [reverse]);
+
+  return (
+    <div
+      ref={trackRef}
+      className="flex w-max gap-4"
+      onMouseEnter={() => tweenRef.current?.pause()}
+      onMouseLeave={() => tweenRef.current?.play()}
+    >
+      {TRACK_ITEMS.map((brand, i) => (
+        <div
+          key={`${brand.id}-${i}`}
+          onMouseEnter={() => onBrandHover(brand)}
+          onMouseLeave={() => onBrandHover(null)}
+          className="shrink-0 cursor-none rounded-full border border-ink-950/15 px-8 py-4 sm:px-10 sm:py-5"
+        >
+          <Text as="span" variant="brandPill" color="inkMuted">
+            {brand.name}
+          </Text>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+export function BrandsMarquee() {
+  const cursorRef = useRef<HTMLDivElement | null>(null);
+  const quickX = useRef<((value: number) => void) | null>(null);
+  const quickY = useRef<((value: number) => void) | null>(null);
+  const [hovered, setHovered] = useState<Brand | null>(null);
+
+  useEffect(() => {
+    const cursor = cursorRef.current;
+    if (!cursor) return;
+    quickX.current = gsap.quickTo(cursor, "x", { duration: 0.35, ease: "power3.out" });
+    quickY.current = gsap.quickTo(cursor, "y", { duration: 0.35, ease: "power3.out" });
+  }, []);
+
+  function handleMouseMove(event: React.MouseEvent<HTMLDivElement>) {
+    quickX.current?.(event.clientX);
+    quickY.current?.(event.clientY);
+  }
+
+  return (
+    <div className="relative overflow-hidden py-16" onMouseMove={handleMouseMove}>
+      <div className="flex flex-col gap-4">
+        <MarqueeRow reverse={false} onBrandHover={setHovered} />
+        <MarqueeRow reverse onBrandHover={setHovered} />
+      </div>
+
+      <div className="pointer-events-none absolute inset-y-0 left-0 w-16 bg-gradient-to-r from-mist to-transparent sm:w-32" />
+      <div className="pointer-events-none absolute inset-y-0 right-0 w-16 bg-gradient-to-l from-mist to-transparent sm:w-32" />
+
+      <div
+        ref={cursorRef}
+        className="pointer-events-none fixed left-0 top-0 z-[60] overflow-hidden rounded-full shadow-[0_20px_40px_-16px_rgba(5,7,10,0.45)] transition-opacity duration-200"
+        style={{
+          width: CURSOR_SIZE_PX,
+          height: CURSOR_SIZE_PX,
+          marginLeft: -CURSOR_SIZE_PX / 2,
+          marginTop: -CURSOR_SIZE_PX / 2,
+          opacity: hovered ? 1 : 0,
+        }}
+      >
+        {hovered && (
+          <Image src={hovered.src} alt={hovered.name} fill sizes={`${CURSOR_SIZE_PX}px`} className="object-cover" />
+        )}
+      </div>
+    </div>
+  );
+}

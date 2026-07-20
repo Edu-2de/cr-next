@@ -1,16 +1,11 @@
 "use client";
 
 import { useEffect, useRef } from "react";
+import { Container } from "@/components/ui/Container";
 import { HeroContent } from "./HeroContent";
 
-// An earlier dark-theme hero variant (different Aurora treatment) existed
-// alongside this one and was deleted as unused — this is now simply "the"
-// hero, folder renamed from hero2/ → hero/ and this component from Hero2 →
-// Hero to match, no functional change. data-theme is "dark" because the
-// Aurora field covers the whole screen in medium/dark blue tones —
-// Header.tsx reads this to keep its own nav text white while it's over
-// this section, matching "enquanto ele estiver na capa suas opções devem
-// ter a cor branca".
+// data-theme="dark": the Aurora field is medium/dark blue, so Header.tsx
+// keeps its nav text white while over this section.
 export function Hero() {
   const sectionRef = useRef<HTMLElement>(null);
   const activeRef = useRef(true);
@@ -25,8 +20,8 @@ export function Hero() {
   }, []);
 
   return (
-    <section id="top" data-theme="dark" ref={sectionRef} className="sticky top-0 z-0 w-full">
+    <Container as="section" id="top" data-theme="dark" ref={sectionRef} position="sticky" z="base" width="full">
       <HeroContent activeRef={activeRef} />
-    </section>
+    </Container>
   );
 }

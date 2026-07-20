@@ -1,9 +1,7 @@
 @import "tailwindcss";
 
 :root {
-  --background: #05070a;
-  --foreground: #eef2f6;
-
+  /* Brand blue — Aurora glow, links/active states, motor particles. */
   --color-brand-50: #eef7ff;
   --color-brand-100: #d9ecfe;
   --color-brand-200: #b9defd;
@@ -16,11 +14,21 @@
   --color-brand-900: #1b3557;
   --color-brand-950: #0e1c31;
 
+  /* Ink — the site's one true dark, used for every dark section/surface
+     (body, Header/Footer, About, LoadingScreen) instead of raw black. */
   --color-ink-950: #05070a;
   --color-ink-900: #0a0e14;
   --color-ink-800: #10161f;
   --color-ink-700: #171f2b;
   --color-ink-600: #212c3b;
+
+  /* Light surfaces — the two backgrounds every light section alternates
+     between (Engineering/Services white, Products/BrandsMarquee mist). */
+  --color-paper: #ffffff;
+  --color-mist: #eaeaea;
+
+  --background: var(--color-ink-950);
+  --foreground: #eef2f6;
 }
 
 @theme inline {
@@ -45,6 +53,9 @@
   --color-ink-700: var(--color-ink-700);
   --color-ink-600: var(--color-ink-600);
 
+  --color-paper: var(--color-paper);
+  --color-mist: var(--color-mist);
+
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
   --font-display: var(--font-space-grotesk);
@@ -57,7 +68,7 @@ body {
 
 ::selection {
   background: var(--color-brand-500);
-  color: #04070c;
+  color: var(--color-ink-950);
 }
 
 /* Fine film-grain texture used to keep flat gradients from looking flat/AI-plastic.

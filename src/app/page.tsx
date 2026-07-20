@@ -1,12 +1,13 @@
-import { ContatoStage } from "@/components/contato/ContatoStage";
-import { PixelDissolve } from "@/components/engenharia/PixelDissolve";
-import { ScrollShowcase } from "@/components/engenharia/ScrollShowcase";
-import { Footer } from "@/components/Footer";
-import { Header } from "@/components/Header";
-import { Hero } from "@/components/hero/Hero";
-import { LoadingScreen } from "@/components/LoadingScreen";
-import { ProductsSection } from "@/components/produtos/ProductsSection";
-import { ServicesSection } from "@/components/servicos/ServicesSection";
+import { AboutStage } from "@/components/sections/about/AboutStage";
+import { PixelDissolve } from "@/components/sections/engineering/PixelDissolve";
+import { ScrollShowcase } from "@/components/sections/engineering/ScrollShowcase";
+import { Footer } from "@/components/layout/Footer";
+import { Header } from "@/components/layout/Header";
+import { Hero } from "@/components/sections/hero/Hero";
+import { LoadingScreen } from "@/components/layout/LoadingScreen";
+import { MIST, PAPER } from "@/lib/palette";
+import { ProductsSection } from "@/components/sections/products/ProductsSection";
+import { ServicesSection } from "@/components/sections/services/ServicesSection";
 
 export default function Home() {
   return (
@@ -18,15 +19,9 @@ export default function Home() {
         <ScrollShowcase />
         <PixelDissolve />
         <ProductsSection />
-        <PixelDissolve fromColor="#eaeaea" toColor="#ffffff" />
+        <PixelDissolve fromColor={MIST} toColor={PAPER} />
         <ServicesSection />
-        {/* Transition into Contato by zooming into "CR MESQUITA" centered on
-            the Q's own stroke until the screen is fully black — explicit
-            request, replacing an earlier "small rectangle expands to fill
-            the screen" idea. See ContatoStage.tsx and
-            CrMesquitaZoomTransition.tsx's own header comments for the full
-            chain of earlier attempts here. */}
-        <ContatoStage />
+        <AboutStage />
       </main>
       <Footer />
     </div>
