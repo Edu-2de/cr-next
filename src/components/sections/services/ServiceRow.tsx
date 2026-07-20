@@ -6,6 +6,7 @@ import Image from "next/image";
 import { useEffect, useRef } from "react";
 import { tv } from "tailwind-variants";
 import { Text } from "@/components/ui/Text";
+import { getServiceWhatsAppHref } from "@/lib/business-info";
 import type { Service } from "@/lib/services-info";
 
 gsap.registerPlugin(ScrollTrigger);
@@ -16,8 +17,8 @@ const serviceRowStyles = tv({
     grid: "grid grid-cols-1 gap-4 sm:items-center sm:gap-6 sm:grid-cols-[minmax(0,0.6fr)_minmax(0,1.3fr)_minmax(0,1fr)] sm:gap-x-16 sm:gap-y-10",
     title: "order-2 sm:order-1",
     description: "order-3 sm:order-2 sm:text-xl",
-    imageWrap: "relative order-1 sm:order-3",
-    imageBox: "relative h-48 w-full overflow-hidden rounded-md sm:h-60",
+    imageWrap: "relative order-1 block sm:order-3",
+    imageBox: "relative h-48 w-full overflow-hidden rounded-md transition-opacity sm:h-60",
     image: "object-cover",
     badge: "absolute bottom-3 left-3 rounded-sm bg-ink-950 px-3 py-1.5",
   },
@@ -60,8 +61,13 @@ export function ServiceRow({ service }: { service: Service }) {
         <Text as="p" size="lg" leading="relaxed" color="inkMuted" className={description()}>
           {service.description}
         </Text>
-        <div className={imageWrap()}>
-          <div className={imageBox()}>
+        <a
+          href={getServiceWhatsAppHref(service.title)}
+          target="_blank"
+          rel="noopener noreferrer"
+          className={imageWrap()}
+        >
+          <div className={imageBox({ class: "hover:opacity-90" })}>
             <Image
               src={service.src}
               alt={service.title}
@@ -73,7 +79,7 @@ export function ServiceRow({ service }: { service: Service }) {
           <Text as="span" variant="badge" color="white" className={badge()}>
             Ver serviço ↗
           </Text>
-        </div>
+        </a>
       </div>
     </div>
   );

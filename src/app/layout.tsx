@@ -1,23 +1,27 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono, Space_Grotesk } from "next/font/google";
 import { tv } from "tailwind-variants";
 import buildingFacadeImg from "@/assets/images/building-facade.jpg";
-import { ADDRESS_CITY, FOUNDED_YEAR, PHONE_HREF, WEBSITE_URL } from "@/lib/business-info";
+import { ADDRESS_CITY, FOUNDED_YEAR, LATITUDE, LONGITUDE, PHONE_HREF, WEBSITE_URL } from "@/lib/business-info";
+import { SERVICES } from "@/lib/services-info";
 import { LenisProvider } from "@/providers/LenisProvider";
 import "./globals.css";
 
 const SITE_TITLE = "CR Mesquita | Motores elétricos de alta performance";
 const SITE_DESCRIPTION =
   "Motores elétricos industriais projetados para torque constante, eficiência energética e operação contínua sem paradas. Venda, manutenção, reforma e diagnóstico técnico em Porto Alegre, RS, desde 1975.";
+const BRAND_COLOR = "#2f7cc9";
 
-// LocalBusiness structured data — real facts pulled from lib/business-info.ts,
-// the same source the page's own footer/contact sections use.
+// LocalBusiness structured data — real facts pulled from lib/business-info.ts
+// and lib/services-info.ts, the same sources the page's own footer/contact/
+// services sections use.
 const STRUCTURED_DATA = {
   "@context": "https://schema.org",
   "@type": "LocalBusiness",
   name: "CR Mesquita Motores Elétricos",
   description: SITE_DESCRIPTION,
   url: WEBSITE_URL,
+  image: new URL(buildingFacadeImg.src, WEBSITE_URL).toString(),
   telephone: PHONE_HREF.replace("tel:", ""),
   foundingDate: String(FOUNDED_YEAR),
   address: {
@@ -26,7 +30,24 @@ const STRUCTURED_DATA = {
     addressRegion: "RS",
     addressCountry: "BR",
   },
+  geo: {
+    "@type": "GeoCoordinates",
+    latitude: LATITUDE,
+    longitude: LONGITUDE,
+  },
   areaServed: "BR",
+  hasOfferCatalog: {
+    "@type": "OfferCatalog",
+    name: "Serviços",
+    itemListElement: SERVICES.map((service) => ({
+      "@type": "Offer",
+      itemOffered: {
+        "@type": "Service",
+        name: service.title,
+        description: service.description,
+      },
+    })),
+  },
 };
 
 const rootLayoutStyles = tv({
@@ -96,6 +117,11 @@ export const metadata: Metadata = {
     description: SITE_DESCRIPTION,
     images: [buildingFacadeImg.src],
   },
+};
+
+export const viewport: Viewport = {
+  themeColor: BRAND_COLOR,
+  colorScheme: "light",
 };
 
 export default function RootLayout({
