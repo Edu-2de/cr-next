@@ -5,8 +5,8 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Image from "next/image";
 import { useEffect, useRef } from "react";
 
-import crImg from "@/app/assets/images/CR.jpg";
-import logoImg from "@/app/assets/images/Logo.png";
+import crImg from "@/app/assets/images/fachada.jpg";
+import logoImg from "@/app/assets/images/logo.png";
 import { MAPS_PLACE_URL } from "@/lib/business-info";
 
 gsap.registerPlugin(ScrollTrigger);

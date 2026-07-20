@@ -3,10 +3,10 @@ import { PixelDissolve } from "@/components/engenharia/PixelDissolve";
 import { ScrollShowcase } from "@/components/engenharia/ScrollShowcase";
 import { Footer } from "@/components/Footer";
 import { Header } from "@/components/Header";
-import { Hero2 as Hero } from "@/components/hero2/Hero";
+import { Hero } from "@/components/hero/Hero";
 import { LoadingScreen } from "@/components/LoadingScreen";
 import { ProductsSection } from "@/components/produtos/ProductsSection";
-import { ServicesSection } from "@/components/servicos3/ServicesSection";
+import { ServicesSection } from "@/components/servicos/ServicesSection";
 
 export default function Home() {
   return (

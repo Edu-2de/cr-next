@@ -5,7 +5,7 @@ import { motion } from "framer-motion";
 import gsap from "gsap";
 import { useLenis } from "./LenisProvider";
 import { PRODUTOS_REVEAL_FRACTION } from "./produtos/ProductsSection";
-import { SERVICOS_REVEAL_FRACTION } from "./servicos3/ServicesSection";
+import { SERVICOS_REVEAL_FRACTION } from "./servicos/ServicesSection";
 
 // Each of these is a real, independent, top-level DOM section id — "Serviços"
 // and "Marcas" used to be phases sharing "engenharia"'s own pinned scroll
@@ -57,7 +57,7 @@ export function Header() {
   // component has used since the very first round.
   const [activeIndex, setActiveIndex] = useState(0);
   const [onDark, setOnDark] = useState(false);
-  // Hides the fixed header from the moment servicos3's editorial services
+  // Hides the fixed header from the moment the services section's editorial
   // list (id="servicos-lista", NOT the MotorIntro sphere/motor/text part
   // above it) is reached, all the way through the black CrMesquitaZoomTransition
   // pin that follows it, until "sobre nós"'s own headline becomes visible —
@@ -84,7 +84,7 @@ export function Header() {
     function update() {
       const el = document.elementFromPoint(window.innerWidth / 2, 120);
       const themed = el?.closest("[data-theme]");
-      // Looked up separately from `themed` — servicos3's stacked cards each
+      // Looked up separately from `themed` — the services section's stacked cards each
       // carry their own `data-theme` (dark/light per card) nested inside
       // the single top-level `<section id="servicos">`, so the nearest
       // `[data-theme]` and the nearest `[id]` are no longer always the same

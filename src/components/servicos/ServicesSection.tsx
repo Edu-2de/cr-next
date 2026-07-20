@@ -4,25 +4,31 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Image from "next/image";
 import { useEffect, useRef } from "react";
-import engenhariaImg from "@/app/assets/images/services.jpg";
-import diagnosticoImg from "@/app/assets/images/services2.jpg";
-import detalheImg from "@/app/assets/images/services3.jpg";
-import instalacaoImg from "@/app/assets/images/services4.jpg";
-import { MOTOR_INTRO_TOTAL_VH, MotorIntro } from "../servicos2/MotorIntro";
+import engenhariaImg from "@/app/assets/images/service-manutencao.jpg";
+import diagnosticoImg from "@/app/assets/images/service-diagnostico.jpg";
+import detalheImg from "@/app/assets/images/service-detalhe.jpg";
+import instalacaoImg from "@/app/assets/images/service-instalacao.jpg";
+import { MOTOR_INTRO_TOTAL_VH, MotorIntro } from "./motor/MotorIntro";
 
 gsap.registerPlugin(ScrollTrigger);
 
-// Experimental Serviços variant — kept in its own folder so servicos2 stays
-// untouched/comparable. MotorIntro (sphere → motor-as-particles → slide
-// next to text) is reused UNCHANGED from servicos2, imported directly
-// rather than forked — explicit follow-up request dropped the whole
-// grow/move-left/particles-to-solid sequence this file used to have on top
-// of it ("esqueça essa ideia do motor ir pra esquerda... ao texto do motor
-// aparecer quero que apenas desça a tela mostrando os serviços"). Once
-// MotorIntro's own pin finishes (text visible next to the motor), the page
-// just continues in plain normal scroll into this services list below —
-// no second pinned sequence, no scroll-hijacking of any kind past that
-// point.
+// This section opens with MotorIntro (sphere → motor-as-particles → slide
+// next to text), which now lives in ./motor/ alongside its MotorModel
+// three.js loader — split into its own subfolder specifically because it's
+// a self-contained, reusable pinned sequence (2 files, its own three.js
+// model-loading concerns) rather than editorial-list markup like the rest
+// of this file. (Older revision history: this used to be split across
+// separately-numbered "servicos"/"servicos2"/"servicos3" folders from
+// earlier design iterations — all consolidated into this single folder
+// once the superseded versions were deleted; see project memory if the old
+// multi-folder history is ever needed.) An earlier version of this section
+// also grew/moved the motor left with a particles-to-solid morph on top of
+// MotorIntro — dropped per explicit request ("esqueça essa ideia do motor
+// ir pra esquerda... ao texto do motor aparecer quero que apenas desça a
+// tela mostrando os serviços"). Once MotorIntro's own pin finishes (text
+// visible next to the motor), the page just continues in plain normal
+// scroll into this services list below — no second pinned sequence, no
+// scroll-hijacking of any kind past that point.
 //
 // The list itself: reference is a supplied screenshot of futurethree.studio
 // (an editorial services list — small uppercase "kicker" label top-left,
@@ -145,7 +151,7 @@ export function ServicesSection() {
           (back to no pull at all, since two rounds of negative margin both
           overshot into clipping the first row). If asked to close this gap
           again, look at MotorIntro's OWN vertical-centering layout
-          (imported unchanged from servicos2) rather than reaching for
+          (in ./motor/MotorIntro.tsx) rather than reaching for
           another negative-margin guess on this wrapper — that's the actual
           source of the dead space, and this wrapper's own margin has
           already proven unreliable for compensating it without clipping. */}

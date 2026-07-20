@@ -3,7 +3,7 @@
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useEffect, useRef } from "react";
-import { remap } from "../engenharia/scrollUtils";
+import { remap } from "../../engenharia/scrollUtils";
 import { MotorModel } from "./MotorModel";
 
 gsap.registerPlugin(ScrollTrigger);

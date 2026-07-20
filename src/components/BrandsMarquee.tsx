@@ -3,11 +3,11 @@
 import gsap from "gsap";
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
-import abbImg from "@/app/assets/images/abb-logo-png_seeklogo-1844.png";
-import sewImg from "@/app/assets/images/sew-eurodrive-logo-png_seeklogo-236154.png";
-import kohlbachImg from "@/app/assets/images/images.jpg";
-import mercosulImg from "@/app/assets/images/images.png";
-import wegImg from "@/app/assets/images/img-standard-share.jpg";
+import abbImg from "@/app/assets/images/brand-abb-logo.png";
+import sewImg from "@/app/assets/images/brand-sew-eurodrive-logo.png";
+import kohlbachImg from "@/app/assets/images/brand-kohlbach-logo.jpg";
+import mercosulImg from "@/app/assets/images/brand-mercosul-logo.png";
+import wegImg from "@/app/assets/images/brand-weg-logo.jpg";
 
 // Replaces the old standalone "Marcas" section (components/engenharia/
 // BrandCarousel.tsx, no longer rendered) — brands are no longer their own

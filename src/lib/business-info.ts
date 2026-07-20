@@ -9,7 +9,7 @@
 //   raw photo is only 284x160, too low-res to read reliably at native size).
 // - MAPS_PLACE_URL: the Google Maps place link the user supplied directly.
 // - FOUNDED_YEAR: from the "50 ANOS · 1975" laurel seal baked into the real
-//   company logo (app/assets/images/Logo.png).
+//   company logo (app/assets/images/logo.png).
 export const WHATSAPP_NUMBER = "(51) 98342-2322";
 export const WHATSAPP_HREF = "https://wa.me/5551983422322";
 

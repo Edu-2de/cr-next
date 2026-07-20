@@ -3,9 +3,11 @@
 import { useEffect, useRef } from "react";
 import gsap from "gsap";
 
-// Light-theme variant of components/hero/Aurora.tsx — same noise/warp math,
-// but the region mask is dropped entirely (the dark original confines its
-// glow to a vertical/horizontal gaussian window, which is why it reads as
+// Light-theme variant of the original dark-theme hero Aurora (that earlier
+// component was deleted as unused — this file's own comments are the only
+// remaining record of it). Same noise/warp math, but the region mask is
+// dropped entirely (the dark original confined its glow to a
+// vertical/horizontal gaussian window, which is why it read as
 // concentrated in one area) so the cloud pattern is visible edge-to-edge,
 // and the color ramp is inverted: near-bg-light for low noise, saturating
 // up to a deep brand blue at the peaks, instead of dark-navy-to-white.

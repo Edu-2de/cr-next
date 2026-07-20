@@ -1,11 +1,11 @@
 "use client";
 
-import trifasicoImg from "@/app/assets/images/producot.jpg";
-import monofasicoImg from "@/app/assets/images/producot2.jpg";
-import altaEficienciaImg from "@/app/assets/images/producot3.jpg";
-import novaImg from "@/app/assets/images/product4.jpg";
-import marathonImg from "@/app/assets/images/product5.jpg";
-import metrosulImg from "@/app/assets/images/product6.jpg";
+import trifasicoImg from "@/app/assets/images/product-trifasico.jpg";
+import monofasicoImg from "@/app/assets/images/product-monofasico.jpg";
+import altaEficienciaImg from "@/app/assets/images/product-alta-eficiencia.jpg";
+import novaImg from "@/app/assets/images/product-nova.jpg";
+import marathonImg from "@/app/assets/images/product-marathon.jpg";
+import metrosulImg from "@/app/assets/images/product-metrosul.jpg";
 import gsap from "gsap";
 import { Draggable } from "gsap/Draggable";
 import { InertiaPlugin } from "gsap/InertiaPlugin";

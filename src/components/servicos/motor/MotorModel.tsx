@@ -7,10 +7,14 @@ import { MeshSurfaceSampler } from "three/examples/jsm/math/MeshSurfaceSampler.j
 import { mergeGeometries } from "three/examples/jsm/utils/BufferGeometryUtils.js";
 
 // Fetched by URL at runtime (GLTFLoader does a plain fetch/XHR, not a
-// bundler import), so it needs to live in public/ — the canonical copy the
-// user references stays at app/assets/models/electric_motor.glb, this is
-// just a runtime-servable duplicate of it. Plain three.js, not
-// react-three-fiber — this project doesn't have @react-three/fiber/drei
+// bundler import), so it must live in public/ — that's the only directory
+// Next.js serves as static files at the site root. An identical copy used
+// to also sit at app/assets/models/electric_motor.glb, but that copy was
+// never actually reachable (app/assets/ goes through the bundler, not
+// served by URL) or imported by any bundler import anywhere — a genuine
+// unused duplicate, deleted. This public/ copy is the only one that
+// exists now and the only one that was ever truly in use. Plain three.js,
+// not react-three-fiber — this project doesn't have @react-three/fiber/drei
 // installed, only the base `three` package.
 const MODEL_URL = "/models/electric_motor.glb";
 

@@ -2,7 +2,8 @@ import { motion } from "framer-motion";
 import { WHATSAPP_HREF, WHATSAPP_NUMBER } from "@/lib/business-info";
 import { Aurora } from "./Aurora";
 
-// Same centered single-column layout as components/hero/HeroContent.tsx,
+// Same centered single-column layout as an earlier dark-theme hero (since
+// deleted as unused),
 // just re-themed light: the Aurora field itself carries the color switch
 // (dark navy bg + bright glow → light bg + saturated-blue glow, full-screen
 // instead of corner-masked, see Aurora.tsx), so this file only swaps text
