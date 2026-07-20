@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import gsap from "gsap";
+import { tv } from "tailwind-variants";
 import { Text } from "@/components/ui/Text";
 import { useLenis } from "@/providers/LenisProvider";
 import { PRODUCTS_REVEAL_FRACTION } from "@/components/sections/products/ProductsSection";
@@ -23,6 +24,21 @@ const NAV_LINKS: NavLink[] = [
 // Long enough that scrubbed per-section scroll effects stay smooth even on
 // the longest pinned-scroll jumps.
 const NAV_SCROLL_DURATION = 2.4;
+
+// Static classes only — the onDark/active-driven colors stay as plain
+// ternaries passed into each slot's own `class` option, since they're a
+// genuine runtime truth table, not a fixed style choice.
+const headerStyles = tv({
+  slots: {
+    header: "fixed inset-x-0 top-4 z-50 flex justify-center px-4 sm:top-6",
+    pill: "flex w-full max-w-4xl items-center justify-between rounded-full border px-7 py-4 backdrop-blur-xl transition-colors duration-300",
+    nav: "flex items-center gap-1 sm:gap-2",
+    navLinkWrap: "relative flex items-center px-4 py-2",
+    activeGlass: "absolute inset-0 rounded-full border backdrop-blur-md transition-colors duration-300",
+    wordmark: "transition-colors duration-300",
+    linkLabel: "relative transition-colors duration-300",
+  },
+});
 
 export function Header() {
   const [activeIndex, setActiveIndex] = useState(0);
@@ -92,22 +108,21 @@ export function Header() {
   }
 
   const hidden = hideForServicesGap;
+  const { header, pill, nav, navLinkWrap, activeGlass, wordmark, linkLabel } = headerStyles();
 
   return (
     <motion.header
       initial={{ opacity: 0, y: -16 }}
       animate={{ opacity: hidden ? 0 : 1, y: hidden ? -32 : 0 }}
       transition={{ duration: 0.5, ease: "easeOut" }}
-      className={`fixed inset-x-0 top-4 z-50 flex justify-center px-4 sm:top-6 ${
-        hidden ? "pointer-events-none" : ""
-      }`}
+      className={header({ class: hidden ? "pointer-events-none" : "" })}
     >
       <div
-        className={`flex w-full max-w-4xl items-center justify-between rounded-full border px-7 py-4 backdrop-blur-xl transition-colors duration-300 ${
-          onDark
+        className={pill({
+          class: onDark
             ? "border-white/10 bg-white/[0.06] shadow-[0_8px_32px_-16px_rgba(0,0,0,0.5)]"
-            : "border-ink-950/10 bg-white/55 shadow-[0_8px_32px_-16px_rgba(5,7,10,0.2)]"
-        }`}
+            : "border-ink-950/10 bg-white/55 shadow-[0_8px_32px_-16px_rgba(5,7,10,0.2)]",
+        })}
       >
         <a href="#top" onClick={(event) => handleNavClick(event, NAV_LINKS[0])}>
           <Text
@@ -116,13 +131,13 @@ export function Header() {
             size="xs"
             weight="semibold"
             tracking="wide"
-            className={`transition-colors duration-300 ${onDark ? "text-white" : "text-ink-950"}`}
+            className={wordmark({ class: onDark ? "text-white" : "text-ink-950" })}
           >
             CR MESQUITA
           </Text>
         </a>
 
-        <nav className="flex items-center gap-1 sm:gap-2">
+        <nav className={nav()}>
           {NAV_LINKS.map((link, i) => {
             const active = i === activeIndex;
             return (
@@ -130,31 +145,31 @@ export function Header() {
                 key={link.label}
                 href={`#${link.sectionId}`}
                 onClick={(event) => handleNavClick(event, link)}
-                className="relative flex items-center px-4 py-2"
+                className={navLinkWrap()}
               >
                 {active && (
                   <motion.span
                     layoutId="nav-active-glass"
                     transition={{ type: "spring", stiffness: 380, damping: 32 }}
-                    className={`absolute inset-0 rounded-full border backdrop-blur-md transition-colors duration-300 ${
-                      onDark
+                    className={activeGlass({
+                      class: onDark
                         ? "border-white/15 bg-white/[0.08] shadow-[0_8px_24px_-12px_rgba(0,0,0,0.5)]"
-                        : "border-ink-950/10 bg-white/50 shadow-[0_8px_24px_-12px_rgba(5,7,10,0.25)]"
-                    }`}
+                        : "border-ink-950/10 bg-white/50 shadow-[0_8px_24px_-12px_rgba(5,7,10,0.25)]",
+                    })}
                   />
                 )}
                 <Text
                   as="span"
                   variant="navLink"
-                  className={`relative transition-colors duration-300 ${
-                    onDark
+                  className={linkLabel({
+                    class: onDark
                       ? active
                         ? "text-white"
                         : "text-white/55 hover:text-white/85"
                       : active
                         ? "text-ink-950"
-                        : "text-ink-950/45 hover:text-ink-950/75"
-                  }`}
+                        : "text-ink-950/45 hover:text-ink-950/75",
+                  })}
                 >
                   {link.label}
                 </Text>

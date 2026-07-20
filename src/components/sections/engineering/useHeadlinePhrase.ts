@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import type { MutableRefObject, RefObject } from "react";
 import gsap from "gsap";
-import { EASE_SETTLE, remap } from "@/components/sections/engineering/scrollUtils";
+import { EASE_SETTLE, remap } from "./scrollUtils";
 
 // Reveals one line at a time via scroll-scrubbed opacity, then holds until
 // ScrollShowcase's pin releases into PixelDissolve.tsx.

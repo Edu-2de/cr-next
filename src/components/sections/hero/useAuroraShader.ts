@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import gsap from "gsap";
-import { FRAGMENT_SRC, VERTEX_SRC } from "@/components/sections/hero/aurora-shaders";
+import { FRAGMENT_SRC, VERTEX_SRC } from "./aurora-shaders";
 
 // A lost context makes compilation fail with a null info log, not a real
 // syntax error — return null instead of throwing when that's the cause.

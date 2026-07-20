@@ -3,6 +3,7 @@
 import gsap from "gsap";
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
+import { tv } from "tailwind-variants";
 import { Text } from "@/components/ui/Text";
 import abbImg from "@/assets/images/brand-abb-logo.png";
 import sewImg from "@/assets/images/brand-sew-eurodrive-logo.png";
@@ -33,6 +34,20 @@ const LOOP_SHIFT_PERCENT = 100 / REPEAT_COUNT;
 const ROW_DURATION_S = 50;
 const CURSOR_SIZE_PX = 128;
 
+const brandsMarqueeStyles = tv({
+  slots: {
+    rowTrack: "flex w-max gap-4",
+    badge: "shrink-0 cursor-none rounded-full border border-ink-950/15 px-8 py-4 sm:px-10 sm:py-5",
+    root: "relative overflow-hidden py-16",
+    rows: "flex flex-col gap-4",
+    fadeLeft: "pointer-events-none absolute inset-y-0 left-0 w-16 bg-gradient-to-r from-mist to-transparent sm:w-32",
+    fadeRight: "pointer-events-none absolute inset-y-0 right-0 w-16 bg-gradient-to-l from-mist to-transparent sm:w-32",
+    cursor:
+      "pointer-events-none fixed left-0 top-0 z-[60] overflow-hidden rounded-full shadow-[0_20px_40px_-16px_rgba(5,7,10,0.45)] transition-opacity duration-200",
+    cursorImage: "object-cover",
+  },
+});
+
 function MarqueeRow({
   reverse,
   onBrandHover,
@@ -58,10 +73,12 @@ function MarqueeRow({
     };
   }, [reverse]);
 
+  const { rowTrack, badge } = brandsMarqueeStyles();
+
   return (
     <div
       ref={trackRef}
-      className="flex w-max gap-4"
+      className={rowTrack()}
       onMouseEnter={() => tweenRef.current?.pause()}
       onMouseLeave={() => tweenRef.current?.play()}
     >
@@ -70,7 +87,7 @@ function MarqueeRow({
           key={`${brand.id}-${i}`}
           onMouseEnter={() => onBrandHover(brand)}
           onMouseLeave={() => onBrandHover(null)}
-          className="shrink-0 cursor-none rounded-full border border-ink-950/15 px-8 py-4 sm:px-10 sm:py-5"
+          className={badge()}
         >
           <Text as="span" variant="brandPill" color="inkMuted">
             {brand.name}

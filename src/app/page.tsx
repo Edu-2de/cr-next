@@ -1,3 +1,4 @@
+import { tv } from "tailwind-variants";
 import { AboutStage } from "@/components/sections/about/AboutStage";
 import { PixelDissolve } from "@/components/sections/engineering/PixelDissolve";
 import { ScrollShowcase } from "@/components/sections/engineering/ScrollShowcase";
@@ -9,12 +10,21 @@ import { MIST, PAPER } from "@/lib/palette";
 import { ProductsSection } from "@/components/sections/products/ProductsSection";
 import { ServicesSection } from "@/components/sections/services/ServicesSection";
 
+const homeStyles = tv({
+  slots: {
+    page: "flex flex-1 flex-col",
+    main: "flex flex-1 flex-col",
+  },
+});
+
 export default function Home() {
+  const { page, main } = homeStyles();
+
   return (
-    <div className="flex flex-1 flex-col">
+    <div className={page()}>
       <LoadingScreen />
       <Header />
-      <main className="flex flex-1 flex-col">
+      <main className={main()}>
         <Hero />
         <ScrollShowcase />
         <PixelDissolve />

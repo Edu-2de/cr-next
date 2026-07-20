@@ -1,7 +1,15 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono, Space_Grotesk } from "next/font/google";
+import { tv } from "tailwind-variants";
 import { LenisProvider } from "@/providers/LenisProvider";
 import "./globals.css";
+
+const rootLayoutStyles = tv({
+  slots: {
+    html: "h-full antialiased",
+    body: "min-h-full flex flex-col bg-background font-sans text-foreground",
+  },
+});
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -30,12 +38,14 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const { html, body } = rootLayoutStyles();
+
   return (
     <html
       lang="pt-BR"
-      className={`${geistSans.variable} ${geistMono.variable} ${spaceGrotesk.variable} h-full antialiased`}
+      className={html({ class: `${geistSans.variable} ${geistMono.variable} ${spaceGrotesk.variable}` })}
     >
-      <body className="min-h-full flex flex-col bg-background font-sans text-foreground">
+      <body className={body()}>
         <LenisProvider>{children}</LenisProvider>
       </body>
     </html>

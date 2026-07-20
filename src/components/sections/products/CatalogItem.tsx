@@ -1,3 +1,4 @@
+import { tv } from "tailwind-variants";
 import { Text } from "@/components/ui/Text";
 import type { CatalogProduct } from "@/lib/products-info";
 
@@ -11,6 +12,22 @@ type CatalogItemProps = {
   rowInnerRef: (el: HTMLDivElement | null) => void;
 };
 
+const catalogItemStyles = tv({
+  slots: {
+    row: "",
+    content: "py-10 sm:py-16",
+    rowHeight: "overflow-hidden",
+    rowInner: "pt-4",
+    description: "max-w-2xl sm:text-lg",
+  },
+  variants: {
+    first: {
+      true: {},
+      false: { row: "border-t border-ink-950/15" },
+    },
+  },
+});
+
 export function CatalogItem({
   product,
   index,
@@ -20,17 +37,19 @@ export function CatalogItem({
   rowHeightRef,
   rowInnerRef,
 }: CatalogItemProps) {
+  const { row, content, rowHeight, rowInner, description } = catalogItemStyles({ first: index === 0 });
+
   return (
-    <div className={index === 0 ? undefined : "border-t border-ink-950/15"}>
-      <div className="py-10 sm:py-16">
+    <div className={row()}>
+      <div className={content()}>
         <div ref={titleWrapRef} style={{ opacity: isActive ? 1 : 0.3 }}>
           <Text as="h3" variant="catalogHeading" color="ink" ref={titleRef}>
             {product.title}
           </Text>
         </div>
-        <div ref={rowHeightRef} className="overflow-hidden" style={{ height: index === 0 ? undefined : 0 }}>
-          <div ref={rowInnerRef} className="pt-4" style={{ opacity: index === 0 ? 1 : 0 }}>
-            <Text as="p" size="base" leading="relaxed" color="inkMuted" className="max-w-2xl sm:text-lg">
+        <div ref={rowHeightRef} className={rowHeight()} style={{ height: index === 0 ? undefined : 0 }}>
+          <div ref={rowInnerRef} className={rowInner()} style={{ opacity: index === 0 ? 1 : 0 }}>
+            <Text as="p" size="base" leading="relaxed" color="inkMuted" className={description()}>
               {product.description}
             </Text>
           </div>

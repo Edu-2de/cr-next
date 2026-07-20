@@ -1,11 +1,19 @@
 "use client";
 
 import { useRef } from "react";
+import { tv } from "tailwind-variants";
 import { Container } from "@/components/ui/Container";
 import { PAPER } from "@/lib/palette";
-import { useTrailingScroll } from "@/hooks/useTrailingScroll";
-import { useScrollShowcase } from "@/hooks/useScrollShowcase";
+import { useTrailingScroll } from "@/hooks/ui/useTrailingScroll";
+import { useScrollShowcase } from "@/hooks/ui/useScrollShowcase";
 import { HeadlinePhrase } from "./HeadlinePhrase";
+
+const scrollShowcaseStyles = tv({
+  slots: {
+    sticky: "sticky top-0 h-screen w-full overflow-hidden",
+    inner: "relative h-full w-full overflow-hidden",
+  },
+});
 
 // Pinned phrase reveal, holds briefly (HOLD_VH) then releases into plain
 // document flow — PixelDissolve.tsx right after carries the color handoff.
@@ -26,6 +34,8 @@ export function ScrollShowcase() {
 
   const progressRef = useScrollShowcase(sectionRef, rootRef, trailingScroll);
 
+  const { sticky, inner } = scrollShowcaseStyles();
+
   return (
     <Container
       as="section"
@@ -35,12 +45,8 @@ export function ScrollShowcase() {
       surface="paper"
       style={{ height: `${TOTAL_VH}vh` }}
     >
-      <div className="sticky top-0 h-screen w-full overflow-hidden" style={{ backgroundColor: PAGE_BG_COLOR }}>
-        <div
-          ref={rootRef}
-          className="relative h-full w-full overflow-hidden"
-          style={{ backgroundColor: PAGE_BG_COLOR }}
-        >
+      <div className={sticky()} style={{ backgroundColor: PAGE_BG_COLOR }}>
+        <div ref={rootRef} className={inner()} style={{ backgroundColor: PAGE_BG_COLOR }}>
           <HeadlinePhrase progressRef={progressRef} />
         </div>
       </div>

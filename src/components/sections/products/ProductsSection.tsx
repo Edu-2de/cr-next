@@ -3,6 +3,7 @@
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useEffect, useRef } from "react";
+import { tv } from "tailwind-variants";
 import { Container } from "@/components/ui/Container";
 import { Text } from "@/components/ui/Text";
 import { CATALOG_PRODUCTS } from "@/lib/products-info";
@@ -13,6 +14,16 @@ import { ProductsCarousel } from "./ProductsCarousel";
 gsap.registerPlugin(ScrollTrigger);
 
 export const PRODUCTS_REVEAL_FRACTION = 0;
+
+const productsSectionStyles = tv({
+  slots: {
+    headerBlock: "mx-auto flex min-h-[85vh] max-w-6xl flex-col justify-center px-6 pb-6 pt-24 sm:min-h-[90vh] sm:px-12 sm:pb-8 sm:pt-32",
+    heading: "text-5xl sm:text-7xl sm:text-nowrap",
+    introParagraph: "mt-10 sm:mt-12",
+    followUpParagraph: "mt-6 sm:mt-8",
+    spacer: "h-[15vh] w-full sm:h-[20vh]",
+  },
+});
 
 export function ProductsSection() {
   const headerRef = useRef<HTMLDivElement | null>(null);
@@ -40,22 +51,21 @@ export function ProductsSection() {
     return () => ctx.revert();
   }, []);
 
+  const { headerBlock, heading, introParagraph, followUpParagraph, spacer } = productsSectionStyles();
+
   return (
     <Container as="section" id="products" data-theme="light" surface="mist">
-      <div
-        ref={headerRef}
-        className="mx-auto flex min-h-[85vh] max-w-6xl flex-col justify-center px-6 pb-6 pt-24 sm:min-h-[90vh] sm:px-12 sm:pb-8 sm:pt-32"
-      >
-        <Text as="h2" variant="sectionHeading" color="ink" className="text-5xl sm:text-7xl sm:text-nowrap">
+      <div ref={headerRef} className={headerBlock()}>
+        <Text as="h2" variant="sectionHeading" color="ink" className={heading()}>
           Com o que trabalhamos
         </Text>
-        <Text as="p" variant="bodyLg" color="inkMuted" className="mt-10 sm:mt-12">
+        <Text as="p" variant="bodyLg" color="inkMuted" className={introParagraph()}>
           Somos uma empresa de Porto Alegre, Rio Grande do Sul, especializada no fornecimento de
           motores elétricos industriais de alta performance para os mais diversos segmentos —
           carcaças reforçadas, torque constante e eficiência energética pensados para operações
           contínuas, sem paradas inesperadas.
         </Text>
-        <Text as="p" variant="bodyLg" color="inkMuted" className="mt-6 sm:mt-8">
+        <Text as="p" variant="bodyLg" color="inkMuted" className={followUpParagraph()}>
           Além da venda, oferecemos manutenção preventiva e corretiva, diagnóstico técnico
           especializado e instalação completa, acompanhando sua indústria do primeiro contato ao
           suporte pós-venda — para que a operação nunca precise parar.
@@ -68,7 +78,7 @@ export function ProductsSection() {
 
       <BrandsMarquee />
 
-      <div className="h-[15vh] w-full sm:h-[20vh]" />
+      <div className={spacer()} />
     </Container>
   );
 }

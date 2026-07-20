@@ -2,7 +2,7 @@ import { useEffect, useRef } from "react";
 import type { RefObject } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import type { TrailingScroll } from "@/hooks/useTrailingScroll";
+import type { TrailingScroll } from "./useTrailingScroll";
 import { remap } from "@/components/sections/engineering/scrollUtils";
 import { CONTENT_END } from "@/components/sections/engineering/ScrollShowcase";
 

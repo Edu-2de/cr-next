@@ -1,7 +1,15 @@
 "use client";
 
 import { useRef } from "react";
-import { useMotorParticles } from "@/hooks/useMotorParticles";
+import { tv } from "tailwind-variants";
+import { useMotorParticles } from "./useMotorParticles";
+
+const motorModelStyles = tv({
+  slots: {
+    container: "relative h-full w-full",
+    canvasWrap: "absolute inset-0 [&>canvas]:h-full [&>canvas]:w-full",
+  },
+});
 
 export function MotorModel({
   formProgressRef, // 0 = loose cube, 1 = fully formed motor
@@ -13,9 +21,11 @@ export function MotorModel({
 
   useMotorParticles(containerRef, canvasWrapRef, formProgressRef);
 
+  const { container, canvasWrap } = motorModelStyles();
+
   return (
-    <div ref={containerRef} className="relative h-full w-full">
-      <div ref={canvasWrapRef} className="absolute inset-0 [&>canvas]:h-full [&>canvas]:w-full" />
+    <div ref={containerRef} className={container()}>
+      <div ref={canvasWrapRef} className={canvasWrap()} />
     </div>
   );
 }

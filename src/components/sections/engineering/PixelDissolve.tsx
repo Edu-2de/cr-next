@@ -1,8 +1,15 @@
 "use client";
 
 import { useRef } from "react";
-import { GRID_COLS, GRID_ROWS, usePixelDissolve } from "@/hooks/usePixelDissolve";
+import { tv } from "tailwind-variants";
+import { GRID_COLS, GRID_ROWS, usePixelDissolve } from "@/hooks/ui/usePixelDissolve";
 import { MIST, PAPER } from "@/lib/palette";
+
+const pixelDissolveStyles = tv({
+  slots: {
+    band: "relative z-10 grid w-full",
+  },
+});
 
 // Blocky pixelation dissolve between two background colors, reused at every
 // section color seam via fromColor/toColor. Normal-flow (not pinned) — it
@@ -26,11 +33,13 @@ export function PixelDissolve({
 
   usePixelDissolve(bandRef, cellRefs, fromColor, toColor);
 
+  const { band } = pixelDissolveStyles();
+
   return (
     <div
       ref={bandRef}
       data-theme="light"
-      className="relative z-10 grid w-full"
+      className={band()}
       style={{
         height: `${BAND_VH}vh`,
         gridTemplateColumns: `repeat(${GRID_COLS}, 1fr)`,

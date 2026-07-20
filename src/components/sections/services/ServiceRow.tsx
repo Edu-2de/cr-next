@@ -4,10 +4,23 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Image from "next/image";
 import { useEffect, useRef } from "react";
+import { tv } from "tailwind-variants";
 import { Text } from "@/components/ui/Text";
 import type { Service } from "@/lib/services-info";
 
 gsap.registerPlugin(ScrollTrigger);
+
+const serviceRowStyles = tv({
+  slots: {
+    row: "border-t border-ink-950/15 py-10 sm:py-14",
+    grid: "grid grid-cols-1 items-center gap-6 sm:grid-cols-[minmax(0,0.6fr)_minmax(0,1.3fr)_minmax(0,1fr)] sm:gap-x-16 sm:gap-y-10",
+    description: "sm:text-xl",
+    imageWrap: "relative",
+    imageBox: "relative h-52 w-full overflow-hidden rounded-md sm:h-60",
+    image: "object-cover",
+    badge: "absolute bottom-3 left-3 rounded-sm bg-ink-950 px-3 py-1.5",
+  },
+});
 
 export function ServiceRow({ service }: { service: Service }) {
   const rowRef = useRef<HTMLDivElement | null>(null);
@@ -35,31 +48,28 @@ export function ServiceRow({ service }: { service: Service }) {
     return () => ctx.revert();
   }, []);
 
+  const { row, grid, description, imageWrap, imageBox, image, badge } = serviceRowStyles();
+
   return (
-    <div ref={rowRef} className="border-t border-ink-950/15 py-10 sm:py-14">
-      <div className="grid grid-cols-1 items-center gap-6 sm:grid-cols-[minmax(0,0.6fr)_minmax(0,1.3fr)_minmax(0,1fr)] sm:gap-x-16 sm:gap-y-10">
+    <div ref={rowRef} className={row()}>
+      <div className={grid()}>
         <Text as="h3" variant="rowHeading" color="ink">
           {service.title}
         </Text>
-        <Text as="p" size="lg" leading="relaxed" color="inkMuted" className="sm:text-xl">
+        <Text as="p" size="lg" leading="relaxed" color="inkMuted" className={description()}>
           {service.description}
         </Text>
-        <div className="relative">
-          <div className="relative h-52 w-full overflow-hidden rounded-md sm:h-60">
+        <div className={imageWrap()}>
+          <div className={imageBox()}>
             <Image
               src={service.src}
               alt={service.title}
               fill
               sizes="(min-width: 640px) 400px, 100vw"
-              className="object-cover"
+              className={image()}
             />
           </div>
-          <Text
-            as="span"
-            variant="badge"
-            color="white"
-            className="absolute bottom-3 left-3 rounded-sm bg-ink-950 px-3 py-1.5"
-          >
+          <Text as="span" variant="badge" color="white" className={badge()}>
             Ver serviço ↗
           </Text>
         </div>

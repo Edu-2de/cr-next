@@ -1,6 +1,7 @@
 "use client";
 
-import { useScrollAccordion } from "@/hooks/useScrollAccordion";
+import { tv } from "tailwind-variants";
+import { useScrollAccordion } from "@/hooks/ui/useScrollAccordion";
 import type { CatalogProduct } from "@/lib/products-info";
 import { CatalogItem } from "./CatalogItem";
 
@@ -9,19 +10,26 @@ import { CatalogItem } from "./CatalogItem";
 // is wrapperHeight - 100vh, not the wrapper's own height.
 const SCROLL_PER_ITEM_VH = 40;
 
+const productCatalogStyles = tv({
+  slots: {
+    wrapper: "relative",
+    sticky: "sticky top-0 flex h-screen w-full items-center",
+    inner: "mx-auto w-full max-w-6xl px-6 sm:px-12",
+    divider: "border-t border-ink-950/15",
+  },
+});
+
 export function ProductCatalog({ products }: { products: CatalogProduct[] }) {
   const { wrapperRef, activeIndex, rowHeightRefs, rowInnerRefs, titleWrapRefs, titleRefs } = useScrollAccordion(
     products.length,
   );
 
+  const { wrapper, sticky, inner, divider } = productCatalogStyles();
+
   return (
-    <div
-      ref={wrapperRef}
-      className="relative"
-      style={{ height: `${100 + products.length * SCROLL_PER_ITEM_VH}vh` }}
-    >
-      <div className="sticky top-0 flex h-screen w-full items-center">
-        <div className="mx-auto w-full max-w-6xl px-6 sm:px-12">
+    <div ref={wrapperRef} className={wrapper()} style={{ height: `${100 + products.length * SCROLL_PER_ITEM_VH}vh` }}>
+      <div className={sticky()}>
+        <div className={inner()}>
           {products.map((product, i) => (
             <CatalogItem
               key={product.id}
@@ -42,7 +50,7 @@ export function ProductCatalog({ products }: { products: CatalogProduct[] }) {
               }}
             />
           ))}
-          <div className="border-t border-ink-950/15" />
+          <div className={divider()} />
         </div>
       </div>
     </div>
