@@ -7,7 +7,7 @@ import { Text } from "@/components/ui/Text";
 
 const loadingScreenStyles = tv({
   slots: {
-    overlay: "fixed inset-0 z-[100] flex items-center justify-center bg-ink-950",
+    overlay: "fixed inset-0 z-100 flex items-center justify-center bg-ink-950",
     content: "flex flex-col items-center gap-6",
     barTrack: "h-px w-36 overflow-hidden bg-white/10",
     barFill: "h-full w-1/3 bg-brand-500",

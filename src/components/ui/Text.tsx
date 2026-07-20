@@ -28,8 +28,8 @@ export const textVariants = tv({
       body: "leading-relaxed",
       kicker: "font-mono text-xs uppercase tracking-[0.2em]",
       eyebrow: "text-sm uppercase tracking-[0.15em]",
-      navLink: "text-[11px] font-medium uppercase tracking-[0.12em]",
-      badge: "text-[10px] font-semibold uppercase tracking-wider",
+      navLink: "text-[0.6875rem] font-medium uppercase tracking-[0.12em]",
+      badge: "text-[0.625rem] font-semibold uppercase tracking-wider",
       brandPill: "text-sm font-semibold uppercase tracking-[0.15em] sm:text-base",
     },
     size: {

@@ -20,10 +20,10 @@ type FactoryLocationProps = {
 const factoryLocationStyles = tv({
   slots: {
     grid: "mt-24 grid w-full grid-cols-1 sm:mt-32 sm:grid-cols-2",
-    photoBox: "relative h-[380px] opacity-0 sm:h-[480px]",
+    photoBox: "relative h-95 opacity-0 sm:h-120",
     photoInner: "absolute inset-0",
     photo: "object-cover",
-    mapBox: "relative h-[380px] opacity-0 sm:h-[480px]",
+    mapBox: "relative h-95 opacity-0 sm:h-120",
     iframe: "h-full w-full border-0",
     mapLink: "absolute right-3 bottom-3 rounded-full border border-white/15 bg-ink-950/70 px-4 py-2 backdrop-blur-md transition-colors hover:bg-ink-950/85",
   },

@@ -40,10 +40,10 @@ const brandsMarqueeStyles = tv({
     badge: "shrink-0 cursor-none rounded-full border border-ink-950/15 px-8 py-4 sm:px-10 sm:py-5",
     root: "relative overflow-hidden py-16",
     rows: "flex flex-col gap-4",
-    fadeLeft: "pointer-events-none absolute inset-y-0 left-0 w-16 bg-gradient-to-r from-mist to-transparent sm:w-32",
-    fadeRight: "pointer-events-none absolute inset-y-0 right-0 w-16 bg-gradient-to-l from-mist to-transparent sm:w-32",
+    fadeLeft: "pointer-events-none absolute inset-y-0 left-0 w-16 bg-linear-to-r from-mist to-transparent sm:w-32",
+    fadeRight: "pointer-events-none absolute inset-y-0 right-0 w-16 bg-linear-to-l from-mist to-transparent sm:w-32",
     cursor:
-      "pointer-events-none fixed left-0 top-0 z-[60] overflow-hidden rounded-full shadow-[0_20px_40px_-16px_rgba(5,7,10,0.45)] transition-opacity duration-200",
+      "pointer-events-none fixed left-0 top-0 z-60 overflow-hidden rounded-full shadow-[0_20px_40px_-16px_rgba(5,7,10,0.45)] transition-opacity duration-200",
     cursorImage: "object-cover",
   },
 });
@@ -116,19 +116,21 @@ export function BrandsMarquee() {
     quickY.current?.(event.clientY);
   }
 
+  const { root, rows, fadeLeft, fadeRight, cursor, cursorImage } = brandsMarqueeStyles();
+
   return (
-    <div className="relative overflow-hidden py-16" onMouseMove={handleMouseMove}>
-      <div className="flex flex-col gap-4">
+    <div className={root()} onMouseMove={handleMouseMove}>
+      <div className={rows()}>
         <MarqueeRow reverse={false} onBrandHover={setHovered} />
         <MarqueeRow reverse onBrandHover={setHovered} />
       </div>
 
-      <div className="pointer-events-none absolute inset-y-0 left-0 w-16 bg-gradient-to-r from-mist to-transparent sm:w-32" />
-      <div className="pointer-events-none absolute inset-y-0 right-0 w-16 bg-gradient-to-l from-mist to-transparent sm:w-32" />
+      <div className={fadeLeft()} />
+      <div className={fadeRight()} />
 
       <div
         ref={cursorRef}
-        className="pointer-events-none fixed left-0 top-0 z-[60] overflow-hidden rounded-full shadow-[0_20px_40px_-16px_rgba(5,7,10,0.45)] transition-opacity duration-200"
+        className={cursor()}
         style={{
           width: CURSOR_SIZE_PX,
           height: CURSOR_SIZE_PX,
@@ -138,7 +140,7 @@ export function BrandsMarquee() {
         }}
       >
         {hovered && (
-          <Image src={hovered.src} alt={hovered.name} fill sizes={`${CURSOR_SIZE_PX}px`} className="object-cover" />
+          <Image src={hovered.src} alt={hovered.name} fill sizes={`${CURSOR_SIZE_PX}px`} className={cursorImage()} />
         )}
       </div>
     </div>

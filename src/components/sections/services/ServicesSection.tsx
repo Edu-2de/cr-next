@@ -19,7 +19,7 @@ export const SERVICES_REVEAL_FRACTION = MOTOR_INTRO_TOTAL_VH / (MOTOR_INTRO_TOTA
 const servicesSectionStyles = tv({
   slots: {
     list: "relative w-full",
-    inner: "mx-auto max-w-[90rem] px-6 pb-24 sm:px-12",
+    inner: "mx-auto max-w-360 px-6 pb-24 sm:px-12",
   },
 });
 

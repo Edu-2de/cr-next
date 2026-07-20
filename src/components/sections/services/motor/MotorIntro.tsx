@@ -29,11 +29,11 @@ const motorIntroStyles = tv({
     outer: "relative z-10",
     sticky: "sticky top-0 h-screen w-full overflow-hidden",
     watermarkLayer: "pointer-events-none absolute inset-0 z-0 flex items-start justify-center pt-36 sm:pt-44",
-    watermarkText: "text-ink-950/[0.06] sm:text-[11rem]",
+    watermarkText: "text-ink-950/6 sm:text-[11rem]",
     contentRow:
       "relative z-10 mx-auto flex h-full max-w-5xl flex-col items-center justify-center gap-8 px-6 pt-36 sm:flex-row sm:gap-12 sm:pt-52",
     textCol: "flex max-w-md flex-col items-center text-center opacity-0 sm:items-start sm:text-left",
-    motorBox: "relative h-72 w-72 shrink-0 sm:h-[28rem] sm:w-[28rem]",
+    motorBox: "relative h-72 w-72 shrink-0 sm:h-112 sm:w-md",
   },
 });
 

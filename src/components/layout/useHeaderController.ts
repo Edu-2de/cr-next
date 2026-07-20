@@ -1,0 +1,91 @@
+import { useEffect, useState } from "react";
+import gsap from "gsap";
+import { useLenis } from "@/providers/LenisProvider";
+import { PRODUCTS_REVEAL_FRACTION } from "@/components/sections/products/ProductsSection";
+import { SERVICES_REVEAL_FRACTION } from "@/components/sections/services/ServicesSection";
+
+// `revealFraction` (0-1, undefined = section's own top) is how far into a
+// pinned section's scroll to land, so nav clicks don't land on a
+// not-yet-revealed blank state.
+export type NavLink = { label: string; sectionId: string; revealFraction?: number };
+
+export const NAV_LINKS: NavLink[] = [
+  { label: "Início", sectionId: "top" },
+  { label: "Produtos", sectionId: "products", revealFraction: PRODUCTS_REVEAL_FRACTION },
+  { label: "Serviços", sectionId: "services", revealFraction: SERVICES_REVEAL_FRACTION },
+  { label: "Sobre", sectionId: "about" },
+];
+
+// Long enough that scrubbed per-section scroll effects stay smooth even on
+// the longest pinned-scroll jumps.
+const NAV_SCROLL_DURATION = 2.4;
+
+export function useHeaderController() {
+  const [activeIndex, setActiveIndex] = useState(0);
+  const [onDark, setOnDark] = useState(false);
+  // Hidden only from the services list (id="services-list") through the
+  // black zoom transition, until the About headline is visible — gating on
+  // "headline top reached viewport" (not "intersecting") avoids it
+  // flickering back on while the headline scrolls past.
+  const [hideForServicesGap, setHideForServicesGap] = useState(false);
+
+  const lenis = useLenis();
+
+  useEffect(() => {
+    function update() {
+      const el = document.elementFromPoint(window.innerWidth / 2, 120);
+      const themed = el?.closest("[data-theme]");
+      // Looked up separately: nested cards carry their own data-theme inside
+      // one top-level section id, so the nearest [data-theme] and nearest
+      // [id] aren't always the same element.
+      const id = el?.closest("[id]")?.id;
+      const index = NAV_LINKS.findIndex((link) => link.sectionId === id);
+      if (index !== -1) setActiveIndex(index);
+      if (themed) setOnDark(themed.getAttribute("data-theme") === "dark");
+
+      const servicesList = document.getElementById("services-list");
+      const aboutHeadline = document.querySelector("#about h2");
+      if (servicesList && aboutHeadline) {
+        const listRect = servicesList.getBoundingClientRect();
+        const headlineRect = aboutHeadline.getBoundingClientRect();
+        const pastServicesStart = listRect.top < window.innerHeight;
+        const aboutReached = headlineRect.top < window.innerHeight;
+        setHideForServicesGap(pastServicesStart && !aboutReached);
+      }
+    }
+    // Runs every frame (not just on 'scroll') so a transient overlay (e.g.
+    // LoadingScreen) sitting at the sample point on mount can't stick.
+    gsap.ticker.add(update);
+    return () => gsap.ticker.remove(update);
+  }, []);
+
+  function handleNavClick(event: React.MouseEvent<HTMLAnchorElement>, link: NavLink) {
+    event.preventDefault();
+
+    // Hero is `position: sticky; top: 0` for the whole page, so its own
+    // getBoundingClientRect().top is always 0 — target position 0 directly
+    // instead of the (permanently pinned) element.
+    let target: number | HTMLElement;
+    if (link.sectionId === "top") {
+      target = 0;
+    } else {
+      const section = document.getElementById(link.sectionId);
+      if (!section) return;
+      target = link.revealFraction
+        ? section.offsetTop + link.revealFraction * (section.offsetHeight - window.innerHeight)
+        : section;
+    }
+
+    // Native scrollIntoView/scrollTo fight Lenis's own RAF-driven scroll
+    // loop, so route through lenis.scrollTo when available.
+    if (lenis) {
+      lenis.scrollTo(target, { offset: 0, duration: NAV_SCROLL_DURATION });
+    } else if (typeof target === "number") {
+      window.scrollTo({ top: target, behavior: "smooth" });
+    } else {
+      target.scrollIntoView({ behavior: "smooth" });
+    }
+  }
+
+  return { activeIndex, onDark, hidden: hideForServicesGap, handleNavClick };
+}
