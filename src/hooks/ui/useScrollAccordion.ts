@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 
@@ -9,11 +9,12 @@ const HEIGHT_EASE = "power2.inOut";
 const REVEAL_DURATION = 0.6;
 const REVEAL_EASE = "power3.out";
 
-// Scroll-driven accordion: one item open at a time as the section scrolls
-// (first item open on arrival). `itemCount` is all the animation math ever
-// needed from the caller's product list — it never reads the product data
-// itself, just its length and index.
-export function useScrollAccordion(itemCount: number) {
+// One item open at a time (first item open on arrival). When `scrollDriven`
+// is true, the section's own pinned scroll advances `activeIndex`
+// (desktop); when false, nothing auto-advances — the caller drives it by
+// calling `openItem` itself (a plain tap accordion, for small screens where
+// scroll-jacking a whole section to reveal one item at a time is unusable).
+export function useScrollAccordion(itemCount: number, scrollDriven: boolean) {
   const wrapperRef = useRef<HTMLDivElement | null>(null);
   const [activeIndex, setActiveIndex] = useState(0);
 
@@ -26,24 +27,29 @@ export function useScrollAccordion(itemCount: number) {
   // item's boundary more than once.
   const revealedIndexRef = useRef<number>(0);
 
+  const openItem = useCallback((i: number) => {
+    setActiveIndex(i);
+    if (revealedIndexRef.current === i) return;
+    revealedIndexRef.current = i;
+    const title = titleRefs.current[i];
+    if (!title) return;
+    gsap.fromTo(
+      title,
+      { y: 16, opacity: 0.35 },
+      { y: 0, opacity: 1, duration: REVEAL_DURATION, ease: REVEAL_EASE, overwrite: "auto" },
+    );
+  }, []);
+
   useEffect(() => {
+    revealedIndexRef.current = 0;
+    setActiveIndex(0);
+
+    if (!scrollDriven) return;
+
     const wrapper = wrapperRef.current;
     if (!wrapper) return;
 
     const range = ScrollTrigger.create({ trigger: wrapper, start: "top top", end: "bottom bottom" });
-
-    function openItem(i: number) {
-      setActiveIndex(i);
-      if (revealedIndexRef.current === i) return;
-      revealedIndexRef.current = i;
-      const title = titleRefs.current[i];
-      if (!title) return;
-      gsap.fromTo(
-        title,
-        { y: 16, opacity: 0.35 },
-        { y: 0, opacity: 1, duration: REVEAL_DURATION, ease: REVEAL_EASE, overwrite: "auto" },
-      );
-    }
 
     const itemTriggers = Array.from({ length: itemCount }, (_, i) =>
       ScrollTrigger.create({
@@ -54,18 +60,14 @@ export function useScrollAccordion(itemCount: number) {
       }),
     );
 
-    // First item starts open without a scroll crossing to fire its onEnter.
-    setActiveIndex(0);
-    revealedIndexRef.current = 0;
-
     return () => {
       range.kill();
       itemTriggers.forEach((t) => t.kill());
     };
-  }, [itemCount]);
+  }, [itemCount, scrollDriven, openItem]);
 
-  // Expand/collapse only — the title reveal itself is driven by the onEnter
-  // callbacks above, decoupled from activeIndex.
+  // Expand/collapse only — the title reveal itself is driven by openItem
+  // above, decoupled from activeIndex.
   useEffect(() => {
     for (let i = 0; i < itemCount; i++) {
       const row = rowHeightRefs.current[i];
@@ -81,5 +83,5 @@ export function useScrollAccordion(itemCount: number) {
     }
   }, [activeIndex, itemCount]);
 
-  return { wrapperRef, activeIndex, rowHeightRefs, rowInnerRefs, titleWrapRefs, titleRefs };
+  return { wrapperRef, activeIndex, rowHeightRefs, rowInnerRefs, titleWrapRefs, titleRefs, openItem };
 }

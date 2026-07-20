@@ -2,8 +2,12 @@
 
 import { useEffect, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { tv } from "tailwind-variants";
 import { Text } from "@/components/ui/Text";
+
+gsap.registerPlugin(ScrollTrigger);
 
 const loadingScreenStyles = tv({
   slots: {
@@ -30,7 +34,14 @@ export function LoadingScreen() {
 
     // Motor GLB deliberately excluded — deferring it avoids stuttering the hero.
     Promise.all([minDelay, fontsReady, windowLoaded]).then(() => {
-      if (!cancelled) setReady(true);
+      if (cancelled) return;
+      // Every pinned/scrubbed section's ScrollTrigger is created (and its
+      // start/end measured) as soon as its component mounts — well before
+      // fonts/images finish loading and settling final layout. Without this,
+      // those triggers keep whatever (sometimes wrong) geometry they saw at
+      // mount, so a scrubbed reveal can silently misfire or never fire.
+      ScrollTrigger.refresh();
+      setReady(true);
     });
 
     return () => {

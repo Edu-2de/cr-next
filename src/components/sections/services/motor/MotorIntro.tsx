@@ -29,11 +29,11 @@ const motorIntroStyles = tv({
     outer: "relative z-10",
     sticky: "sticky top-0 h-screen w-full overflow-hidden",
     watermarkLayer: "pointer-events-none absolute inset-0 z-0 flex items-start justify-center pt-36 sm:pt-44",
-    watermarkText: "text-ink-950/6 sm:text-[11rem]",
+    watermarkText: "text-ink-950/6 text-6xl sm:text-8xl lg:text-[11rem]",
     contentRow:
-      "relative z-10 mx-auto flex h-full max-w-5xl flex-col items-center justify-center gap-8 px-6 pt-36 sm:flex-row sm:gap-12 sm:pt-52",
-    textCol: "flex max-w-md flex-col items-center text-center opacity-0 sm:items-start sm:text-left",
-    motorBox: "relative h-72 w-72 shrink-0 sm:h-112 sm:w-md",
+      "relative z-10 mx-auto flex h-full max-w-5xl flex-col items-center justify-center gap-8 px-6 pt-36 lg:flex-row lg:gap-12 lg:pt-52",
+    textCol: "order-2 flex max-w-md flex-col items-center text-center opacity-0 lg:order-1 lg:items-start lg:text-left",
+    motorBox: "relative order-1 h-72 w-72 shrink-0 lg:order-2 lg:h-112 lg:w-md",
   },
 });
 
@@ -48,7 +48,7 @@ export function MotorIntro() {
         {/* Watermark stays in its own layer, outside motorBoxRef, so it
             doesn't move when the box translates during the slide phase. */}
         <div className={watermarkLayer()}>
-          <Text as="span" variant="watermark" size="8xl" className={watermarkText()}>
+          <Text as="span" variant="watermark" className={watermarkText()}>
             Serviços
           </Text>
         </div>

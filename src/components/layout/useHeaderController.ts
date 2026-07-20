@@ -22,7 +22,10 @@ const NAV_SCROLL_DURATION = 2.4;
 
 export function useHeaderController() {
   const [activeIndex, setActiveIndex] = useState(0);
-  const [onDark, setOnDark] = useState(false);
+  // The page always mounts scrolled to top, over Hero (dark) — defaulting to
+  // true instead of false avoids a one-frame flash of the light pill style
+  // before the ticker below runs its first sample.
+  const [onDark, setOnDark] = useState(true);
   // Hidden only from the services list (id="services-list") through the
   // black zoom transition, until the About headline is visible — gating on
   // "headline top reached viewport" (not "intersecting") avoids it
@@ -44,12 +47,16 @@ export function useHeaderController() {
       if (themed) setOnDark(themed.getAttribute("data-theme") === "dark");
 
       const servicesList = document.getElementById("services-list");
-      const aboutHeadline = document.querySelector("#about h2");
-      if (servicesList && aboutHeadline) {
+      const about = document.getElementById("about");
+      if (servicesList && about) {
         const listRect = servicesList.getBoundingClientRect();
-        const headlineRect = aboutHeadline.getBoundingClientRect();
+        const aboutRect = about.getBoundingClientRect();
         const pastServicesStart = listRect.top < window.innerHeight;
-        const aboutReached = headlineRect.top < window.innerHeight;
+        // Reappears as soon as the About section itself starts entering —
+        // waiting for its (vertically centered, in a ~75-80vh band)
+        // headline specifically meant staying hidden well past where About's
+        // own dark background already covers the viewport.
+        const aboutReached = aboutRect.top < window.innerHeight;
         setHideForServicesGap(pastServicesStart && !aboutReached);
       }
     }

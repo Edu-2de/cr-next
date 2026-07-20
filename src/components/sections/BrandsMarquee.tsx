@@ -5,6 +5,7 @@ import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import { tv } from "tailwind-variants";
 import { Text } from "@/components/ui/Text";
+import { useIsDesktop } from "@/hooks/ui/useIsDesktop";
 import abbImg from "@/assets/images/brand-abb-logo.png";
 import sewImg from "@/assets/images/brand-sew-eurodrive-logo.png";
 import kohlbachImg from "@/assets/images/brand-kohlbach-logo.jpg";
@@ -50,10 +51,16 @@ const brandsMarqueeStyles = tv({
 
 function MarqueeRow({
   reverse,
+  isDesktop,
+  hoveredId,
   onBrandHover,
+  onBrandTap,
 }: {
   reverse: boolean;
+  isDesktop: boolean;
+  hoveredId: string | null;
   onBrandHover: (brand: Brand | null) => void;
+  onBrandTap: (brand: Brand, event: React.MouseEvent) => void;
 }) {
   const trackRef = useRef<HTMLDivElement | null>(null);
   const tweenRef = useRef<gsap.core.Tween | null>(null);
@@ -73,20 +80,36 @@ function MarqueeRow({
     };
   }, [reverse]);
 
+  useEffect(() => {
+    if (isDesktop) return;
+    // Below desktop, a selected brand's popup stays put — pause the row
+    // it belongs to instead of driving pause/play off hover.
+    if (hoveredId) tweenRef.current?.pause();
+    else tweenRef.current?.play();
+  }, [isDesktop, hoveredId]);
+
   const { rowTrack, badge } = brandsMarqueeStyles();
 
   return (
     <div
       ref={trackRef}
       className={rowTrack()}
-      onMouseEnter={() => tweenRef.current?.pause()}
-      onMouseLeave={() => tweenRef.current?.play()}
+      onMouseEnter={isDesktop ? () => tweenRef.current?.pause() : undefined}
+      onMouseLeave={isDesktop ? () => tweenRef.current?.play() : undefined}
     >
       {TRACK_ITEMS.map((brand, i) => (
         <div
           key={`${brand.id}-${i}`}
-          onMouseEnter={() => onBrandHover(brand)}
-          onMouseLeave={() => onBrandHover(null)}
+          onMouseEnter={isDesktop ? () => onBrandHover(brand) : undefined}
+          onMouseLeave={isDesktop ? () => onBrandHover(null) : undefined}
+          onClick={
+            isDesktop
+              ? undefined
+              : (event) => {
+                  event.stopPropagation();
+                  onBrandTap(brand, event);
+                }
+          }
           className={badge()}
         >
           <Text as="span" variant="brandPill" color="inkMuted">
@@ -103,6 +126,7 @@ export function BrandsMarquee() {
   const quickX = useRef<((value: number) => void) | null>(null);
   const quickY = useRef<((value: number) => void) | null>(null);
   const [hovered, setHovered] = useState<Brand | null>(null);
+  const isDesktop = useIsDesktop();
 
   useEffect(() => {
     const cursor = cursorRef.current;
@@ -111,9 +135,28 @@ export function BrandsMarquee() {
     quickY.current = gsap.quickTo(cursor, "y", { duration: 0.35, ease: "power3.out" });
   }, []);
 
+  // Dismiss the tapped-open popup on any tap elsewhere on the page — badges
+  // themselves stopPropagation so this only fires for outside taps.
+  useEffect(() => {
+    if (isDesktop || !hovered) return;
+    function dismiss() {
+      setHovered(null);
+    }
+    window.addEventListener("click", dismiss);
+    return () => window.removeEventListener("click", dismiss);
+  }, [isDesktop, hovered]);
+
   function handleMouseMove(event: React.MouseEvent<HTMLDivElement>) {
+    if (!isDesktop) return;
     quickX.current?.(event.clientX);
     quickY.current?.(event.clientY);
+  }
+
+  function handleBrandTap(brand: Brand, event: React.MouseEvent) {
+    // Instant placement (not the smoothed quickTo used for mouse-follow) —
+    // there's no continuous pointer motion to ease from on tap.
+    gsap.set(cursorRef.current, { x: event.clientX, y: event.clientY });
+    setHovered((current) => (current?.id === brand.id ? null : brand));
   }
 
   const { root, rows, fadeLeft, fadeRight, cursor, cursorImage } = brandsMarqueeStyles();
@@ -121,8 +164,20 @@ export function BrandsMarquee() {
   return (
     <div className={root()} onMouseMove={handleMouseMove}>
       <div className={rows()}>
-        <MarqueeRow reverse={false} onBrandHover={setHovered} />
-        <MarqueeRow reverse onBrandHover={setHovered} />
+        <MarqueeRow
+          reverse={false}
+          isDesktop={isDesktop}
+          hoveredId={hovered?.id ?? null}
+          onBrandHover={setHovered}
+          onBrandTap={handleBrandTap}
+        />
+        <MarqueeRow
+          reverse
+          isDesktop={isDesktop}
+          hoveredId={hovered?.id ?? null}
+          onBrandHover={setHovered}
+          onBrandTap={handleBrandTap}
+        />
       </div>
 
       <div className={fadeLeft()} />

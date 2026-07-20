@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
+import gsap from "gsap";
 import { Container } from "@/components/ui/Container";
 import { HeroContent } from "./HeroContent";
 
@@ -11,12 +12,17 @@ export function Hero() {
   const activeRef = useRef(true);
 
   useEffect(() => {
+    // Polled every frame (not just on 'scroll') — a discrete scroll listener
+    // can miss the moment scrollY drops back under the threshold once a
+    // fast/eased (Lenis) scroll gesture settles without firing another
+    // event, leaving the Aurora canvas frozen on whatever frame it stopped
+    // drawing on.
     function updateActive() {
       activeRef.current = window.scrollY < window.innerHeight * 1.15;
     }
     updateActive();
-    window.addEventListener("scroll", updateActive, { passive: true });
-    return () => window.removeEventListener("scroll", updateActive);
+    gsap.ticker.add(updateActive);
+    return () => gsap.ticker.remove(updateActive);
   }, []);
 
   return (

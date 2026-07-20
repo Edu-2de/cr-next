@@ -18,7 +18,7 @@ export const PRODUCTS_REVEAL_FRACTION = 0;
 const productsSectionStyles = tv({
   slots: {
     headerBlock: "mx-auto flex min-h-[85vh] max-w-6xl flex-col justify-center px-6 pb-6 pt-24 sm:min-h-[90vh] sm:px-12 sm:pb-8 sm:pt-32",
-    heading: "text-5xl sm:text-7xl sm:text-nowrap",
+    heading: "text-5xl sm:text-7xl lg:text-nowrap",
     introParagraph: "mt-10 sm:mt-12",
     followUpParagraph: "mt-6 sm:mt-8",
     spacer: "h-[15vh] w-full sm:h-[20vh]",

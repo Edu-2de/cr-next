@@ -6,6 +6,7 @@ type CatalogItemProps = {
   product: CatalogProduct;
   index: number;
   isActive: boolean;
+  onSelect?: () => void;
   titleWrapRef: (el: HTMLDivElement | null) => void;
   titleRef: (el: HTMLHeadingElement | null) => void;
   rowHeightRef: (el: HTMLDivElement | null) => void;
@@ -19,6 +20,7 @@ const catalogItemStyles = tv({
     rowHeight: "overflow-hidden",
     rowInner: "pt-4",
     description: "max-w-2xl sm:text-lg",
+    titleButton: "block w-full text-left",
   },
   variants: {
     first: {
@@ -32,17 +34,23 @@ export function CatalogItem({
   product,
   index,
   isActive,
+  onSelect,
   titleWrapRef,
   titleRef,
   rowHeightRef,
   rowInnerRef,
 }: CatalogItemProps) {
-  const { row, content, rowHeight, rowInner, description } = catalogItemStyles({ first: index === 0 });
+  const { row, content, rowHeight, rowInner, description, titleButton } = catalogItemStyles({ first: index === 0 });
 
   return (
     <div className={row()}>
       <div className={content()}>
-        <div ref={titleWrapRef} style={{ opacity: isActive ? 1 : 0.3 }}>
+        <div
+          ref={titleWrapRef}
+          style={{ opacity: isActive ? 1 : 0.3 }}
+          {...(onSelect && { role: "button", tabIndex: 0, onClick: onSelect })}
+          className={onSelect ? titleButton() : undefined}
+        >
           <Text as="h3" variant="catalogHeading" color="ink" ref={titleRef}>
             {product.title}
           </Text>

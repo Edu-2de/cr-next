@@ -12,11 +12,12 @@ gsap.registerPlugin(ScrollTrigger);
 
 const serviceRowStyles = tv({
   slots: {
-    row: "border-t border-ink-950/15 py-10 sm:py-14",
-    grid: "grid grid-cols-1 items-center gap-6 sm:grid-cols-[minmax(0,0.6fr)_minmax(0,1.3fr)_minmax(0,1fr)] sm:gap-x-16 sm:gap-y-10",
-    description: "sm:text-xl",
-    imageWrap: "relative",
-    imageBox: "relative h-52 w-full overflow-hidden rounded-md sm:h-60",
+    row: "border-t border-ink-950/15 py-8 sm:py-14",
+    grid: "grid grid-cols-1 gap-4 sm:items-center sm:gap-6 sm:grid-cols-[minmax(0,0.6fr)_minmax(0,1.3fr)_minmax(0,1fr)] sm:gap-x-16 sm:gap-y-10",
+    title: "order-2 sm:order-1",
+    description: "order-3 sm:order-2 sm:text-xl",
+    imageWrap: "relative order-1 sm:order-3",
+    imageBox: "relative h-48 w-full overflow-hidden rounded-md sm:h-60",
     image: "object-cover",
     badge: "absolute bottom-3 left-3 rounded-sm bg-ink-950 px-3 py-1.5",
   },
@@ -48,12 +49,12 @@ export function ServiceRow({ service }: { service: Service }) {
     return () => ctx.revert();
   }, []);
 
-  const { row, grid, description, imageWrap, imageBox, image, badge } = serviceRowStyles();
+  const { row, grid, title, description, imageWrap, imageBox, image, badge } = serviceRowStyles();
 
   return (
     <div ref={rowRef} className={row()}>
       <div className={grid()}>
-        <Text as="h3" variant="rowHeading" color="ink">
+        <Text as="h3" variant="rowHeading" color="ink" className={title()}>
           {service.title}
         </Text>
         <Text as="p" size="lg" leading="relaxed" color="inkMuted" className={description()}>

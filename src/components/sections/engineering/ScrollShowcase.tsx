@@ -10,7 +10,11 @@ import { HeadlinePhrase } from "./HeadlinePhrase";
 
 const scrollShowcaseStyles = tv({
   slots: {
-    sticky: "sticky top-0 h-screen w-full overflow-hidden",
+    // will-change-transform forces this onto its own GPU-composited layer —
+    // without it, fast scrolling can catch this sticky sheet's paint order
+    // racing against Hero's WebGL canvas layer underneath, flashing the
+    // canvas's raw pixels through where this opaque sheet should be.
+    sticky: "sticky top-0 h-screen w-full overflow-hidden will-change-transform",
     inner: "relative h-full w-full overflow-hidden",
   },
 });
