@@ -40,10 +40,18 @@ export function useScrollAccordion(itemCount: number, scrollDriven: boolean) {
     );
   }, []);
 
-  useEffect(() => {
+  // Resets to item 0 whenever the interaction mode itself flips (scroll-
+  // driven <-> tap, e.g. a viewport crossing the desktop breakpoint) — done
+  // during render, React's documented way to "adjust state when a prop
+  // changes", instead of a setState called synchronously in an effect body.
+  const prevScrollDrivenRef = useRef(scrollDriven);
+  if (prevScrollDrivenRef.current !== scrollDriven) {
+    prevScrollDrivenRef.current = scrollDriven;
     revealedIndexRef.current = 0;
-    setActiveIndex(0);
+    if (activeIndex !== 0) setActiveIndex(0);
+  }
 
+  useEffect(() => {
     if (!scrollDriven) return;
 
     const wrapper = wrapperRef.current;
