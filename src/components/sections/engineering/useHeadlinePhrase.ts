@@ -7,7 +7,7 @@ import { EASE_SETTLE, remap } from "./scrollUtils";
 // ScrollShowcase's pin releases into PixelDissolve.tsx.
 export  const HEADLINE_LINES = [
   ["Somos", "a", "força", "que", "move", "a", "sua", "indústria."],
-  ["Venda", "de", "motores", "elétricos,", "peças", "de", "reposição", "e", "prestação", "de", "serviços"]
+  ["Venda", "de", "motores", "elétricos,", "peças", "de", "reposição", "e", "prestação", "de", "serviços."]
 ];
 
 const WORDS_REVEAL_START = 0;

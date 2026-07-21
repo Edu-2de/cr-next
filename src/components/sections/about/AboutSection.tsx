@@ -13,7 +13,7 @@ import logoImg from "@/assets/images/logo.png";
 const HEADLINE = "sobre nós";
 
 const CONSOLIDATED_TITLE = "Uma empresa consolidada";
-const FACTORY_TITLE = "Fábrica própria";
+const FACTORY_TITLE = "Oficina própria";
 
 const aboutSectionStyles = tv({
   slots: {
@@ -170,13 +170,11 @@ export function AboutSection() {
           </Text>
           <Text as="p" variant="lead" color="whiteMuted" className={factoryParagraph()}>
             Nossa estrutura conta com oficina própria e infraestrutura completa em Porto Alegre. Realizamos testes rigorosos e reformas em motores de todos os portes com equipe 100% dedicada, assegurando agilidade e precisão em todo o processo. Venha conhecer nossa estrutura e ver de perto o padrão do nosso trabalho!
-
+            <br/>
             Endereço: Av. Maranhão, 48 - São Geraldo, Porto Alegre - RS | CEP 90230-040
-
+            <br/>
             Segunda a Quinta-feira: 07h30 às 12h00 | 13h05 às 17h30
             Sexta-feira: 07h30 às 12h00 | 13h05 às 16h55
-
-
           </Text>
         </div>
       </div>
