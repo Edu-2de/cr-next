@@ -1,7 +1,7 @@
-import { motion } from "framer-motion";
-import { tv } from "tailwind-variants";
 import { Text } from "@/components/ui/Text";
 import { WHATSAPP_HREF, WHATSAPP_NUMBER } from "@/lib/business-info";
+import { motion } from "framer-motion";
+import { tv } from "tailwind-variants";
 import { Aurora } from "./Aurora";
 
 const heroContentStyles = tv({
@@ -31,9 +31,7 @@ export function HeroContent({ activeRef }: { activeRef?: React.RefObject<boolean
           transition={{ duration: 0.9, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
           className={headline()}
         >
-          Potência
-          <br />
-          contínua
+          CR MESQUITA
         </Text>
         <Text
           as={motion.p}
@@ -44,7 +42,7 @@ export function HeroContent({ activeRef }: { activeRef?: React.RefObject<boolean
           transition={{ duration: 0.7, delay: 0.55 }}
           className={subline()}
         >
-          Motores elétricos industriais de alta performance
+          Confiança e tradição em motores elétricos
         </Text>
         <Text
           as={motion.a}

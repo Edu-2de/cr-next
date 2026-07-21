@@ -1,18 +1,18 @@
 "use client";
 
+import hercImg from "@/assets/images/brand-hercules-logo.jpg";
+import marImg from "@/assets/images/brand-marathon-logo.jpg";
+import mercosulImg from "@/assets/images/brand-mercosul-logo.jpg";
+import novaImg from "@/assets/images/brand-nova-logo.jpg";
+import wegImg from "@/assets/images/brand-weg-logo.jpg";
+import { Text } from "@/components/ui/Text";
+import { useIsDesktop } from "@/hooks/ui/useIsDesktop";
 import gsap from "gsap";
 import { Draggable } from "gsap/Draggable";
 import { InertiaPlugin } from "gsap/InertiaPlugin";
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import { tv } from "tailwind-variants";
-import { Text } from "@/components/ui/Text";
-import { useIsDesktop } from "@/hooks/ui/useIsDesktop";
-import abbImg from "@/assets/images/brand-abb-logo.png";
-import sewImg from "@/assets/images/brand-sew-eurodrive-logo.png";
-import kohlbachImg from "@/assets/images/brand-kohlbach-logo.jpg";
-import mercosulImg from "@/assets/images/brand-mercosul-logo.png";
-import wegImg from "@/assets/images/brand-weg-logo.jpg";
 
 gsap.registerPlugin(Draggable, InertiaPlugin);
 
@@ -20,13 +20,13 @@ gsap.registerPlugin(Draggable, InertiaPlugin);
 // rather than CSS @keyframes since globals.css forces CSS animation
 // durations to ~0 under prefers-reduced-motion. Rendered in both Products
 // and Services, so it lives here rather than in either section's folder.
-export type Brand = { id: string; name: string; src: typeof abbImg };
+export type Brand = { id: string; name: string; src: typeof hercImg };
 
 export const BRANDS: Brand[] = [
-  { id: "abb", name: "ABB", src: abbImg },
-  { id: "sew", name: "SEW Eurodrive", src: sewImg },
-  { id: "kohlbach", name: "Kohlbach", src: kohlbachImg },
+  { id: "hercules", name: "Hercules", src: hercImg },
+  { id: "marathon", name: "Marathon", src: marImg },
   { id: "mercosul", name: "Mercosul", src: mercosulImg },
+  { id: "nova", name: "Nova", src: novaImg },
   { id: "weg", name: "WEG", src: wegImg },
 ];
 

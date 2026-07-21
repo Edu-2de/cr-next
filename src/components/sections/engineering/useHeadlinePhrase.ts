@@ -1,15 +1,13 @@
-import { useEffect } from "react";
-import type { MutableRefObject, RefObject } from "react";
 import gsap from "gsap";
+import type { MutableRefObject, RefObject } from "react";
+import { useEffect } from "react";
 import { EASE_SETTLE, remap } from "./scrollUtils";
 
 // Reveals one line at a time via scroll-scrubbed opacity, then holds until
 // ScrollShowcase's pin releases into PixelDissolve.tsx.
-export const HEADLINE_LINES = [
-  ["Precisão", "e", "alta", "performance"],
-  ["para", "motores", "elétricos", "industriais."],
-  ["Cada", "projeto", "passa", "por", "um", "processo"],
-  ["rigoroso", "de", "engenharia,", "do", "diagnóstico", "ao", "acabamento."],
+export  const HEADLINE_LINES = [
+  ["Somos", "a", "força", "que", "move", "a", "sua", "indústria."],
+  ["Venda", "de", "motores", "elétricos,", "peças", "de", "reposição", "e", "prestação", "de", "serviços"]
 ];
 
 const WORDS_REVEAL_START = 0;

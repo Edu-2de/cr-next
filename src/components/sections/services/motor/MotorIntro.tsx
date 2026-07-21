@@ -1,10 +1,10 @@
 "use client";
 
-import { tv } from "tailwind-variants";
 import { Text } from "@/components/ui/Text";
 import { PAPER } from "@/lib/palette";
-import { useMotorIntroAnimation } from "./useMotorIntroAnimation";
+import { tv } from "tailwind-variants";
 import { MotorModel } from "./MotorModel";
+import { useMotorIntroAnimation } from "./useMotorIntroAnimation";
 
 // Pinned sequence: a cube of particles forms into the motor, then slides
 // into its side slot as the text fades in beside it — centered as one unit.
@@ -56,8 +56,7 @@ export function MotorIntro() {
         <div className={contentRow()}>
           <div ref={textRef} className={textCol()}>
             <Text as="p" variant="bodyLg" color="inkMuted">
-              Da manutenção à instalação, cuidamos de cada etapa para que seus motores elétricos continuem operando
-              com confiabilidade e performance máxima.
+              Contamos com estrutura e oficina própria equipada com tecnologia de ponta e profissionais altamente especializados, garantindo que seus equipamentos elétricos operem com máxima confiabilidade e alta performance
             </Text>
           </div>
 

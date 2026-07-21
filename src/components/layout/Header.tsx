@@ -1,11 +1,11 @@
 "use client";
 
+import { Text } from "@/components/ui/Text";
+import { WHATSAPP_HREF, WHATSAPP_NUMBER } from "@/lib/business-info";
 import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
 import { FiMenu, FiX } from "react-icons/fi";
 import { tv } from "tailwind-variants";
-import { Text } from "@/components/ui/Text";
-import { WHATSAPP_HREF, WHATSAPP_NUMBER } from "@/lib/business-info";
 import { HeaderNavLink } from "./HeaderNavLink";
 import { NAV_LINKS, useHeaderController } from "./useHeaderController";
 
@@ -13,7 +13,7 @@ const headerStyles = tv({
   slots: {
     header: "fixed inset-x-0 top-4 z-50 flex justify-center px-4 sm:top-6",
     wrap: "relative z-10 flex w-full max-w-4xl flex-col items-center",
-    pill: "flex w-full items-center justify-between rounded-full border px-5 py-3 backdrop-blur-xl transition-colors duration-300 sm:px-7 sm:py-4",
+    pill: "flex w-full items-center justify-center rounded-full border px-5 py-3 backdrop-blur-xl transition-colors duration-300 sm:px-7 sm:py-4",
     nav: "hidden items-center gap-1 sm:flex sm:gap-2",
     wordmark: "shrink-0 whitespace-nowrap transition-colors duration-300",
     menuButton: "relative z-10 flex size-8 shrink-0 items-center justify-center sm:hidden",
@@ -49,7 +49,6 @@ export function Header() {
     wrap,
     pill,
     nav,
-    wordmark,
     menuButton,
     mobilePanel,
     mobilePanelGrain,
@@ -89,18 +88,6 @@ export function Header() {
               : "border-ink-950/10 bg-white/55 shadow-[0_8px_32px_-16px_rgba(5,7,10,0.2)]",
           })}
         >
-          <a href="#top" onClick={(event) => handleNavClick(event, NAV_LINKS[0])}>
-            <Text
-              as="span"
-              variant="wordmark"
-              size="xs"
-              weight="semibold"
-              tracking="wide"
-              className={wordmark({ class: onDark ? "text-white" : "text-ink-950" })}
-            >
-              CR MESQUITA
-            </Text>
-          </a>
 
           <nav className={nav()}>
             {NAV_LINKS.map((link, i) => (

@@ -1,9 +1,9 @@
-import threePhaseImg from "@/assets/images/product-three-phase.jpg";
-import singlePhaseImg from "@/assets/images/product-single-phase.jpg";
 import highEfficiencyImg from "@/assets/images/product-high-efficiency.jpg";
-import novaImg from "@/assets/images/product-nova.jpg";
 import marathonImg from "@/assets/images/product-marathon.jpg";
 import metrosulImg from "@/assets/images/product-metrosul.jpg";
+import singlePhaseImg from "@/assets/images/product-single-phase.jpg";
+import threePhaseImg from "@/assets/images/product-three-phase.jpg";
+import wegKeyImg from "@/assets/images/product-weg-second.jpg";
 
 export type Product = { id: string; title: string; description: string; src: typeof threePhaseImg };
 
@@ -27,14 +27,8 @@ export const PRODUCTS: Product[] = [
     src: highEfficiencyImg,
   },
   {
-    id: "nova",
-    title: "Motores de indução trifásicos",
-    description: "Robustez e confiabilidade para cargas pesadas em linhas de produção.",
-    src: novaImg,
-  },
-  {
     id: "marathon",
-    title: "Motores blindados de alta resistência",
+    title: "Motores elétricos industriais",
     description: "Proteção reforçada contra poeira, umidade e ambientes agressivos.",
     src: marathonImg,
   },
@@ -44,28 +38,37 @@ export const PRODUCTS: Product[] = [
     description: "Versatilidade para as mais diversas aplicações industriais do dia a dia.",
     src: metrosulImg,
   },
+  {
+    id: "weg2",
+    title: "Chaves de partida",
+    description: "Versatilidade para as mais diversas aplicações industriais do dia a dia.",
+    src: wegKeyImg,
+  },
 ];
 
-export type CatalogProduct = { id: string; title: string; description: string };
+export type CatalogProduct = { id: string; title: string; description: string; specs: string[] };
 
 // Shorter curated list with longer descriptions for the catalog accordion below the carousel.
 export const CATALOG_PRODUCTS: CatalogProduct[] = [
   {
     id: "three-phase",
-    title: "Motores trifásicos industriais",
+    title: "Motores trifásicos",
     description:
-      "Desenvolvidos para operação contínua em ambientes industriais exigentes, nossos motores trifásicos entregam torque constante e alta performance mesmo sob cargas pesadas. Contam com carcaças reforçadas e componentes internos rigorosamente testados, garantindo confiabilidade em linhas de produção que não podem parar. Cada unidade passa por diagnóstico técnico completo antes da entrega, assegurando o desempenho esperado desde o primeiro dia de operação.",
+      "Projetados para operação contínua em ambientes industriais exigentes, os motores trifásicos do nosso catálogo entregam torque constante e alta performance mesmo sob cargas pesadas. Contam com carcaças reforçadas e componentes de máxima procedência, garantindo total confiabilidade para linhas de produção que não podem parar.",
+    specs: ["Potências de 0,16 CV a 200 CV", "Opções de 2, 4, 6 e 8 polos."]
   },
   {
     id: "high-efficiency",
-    title: "Motores de alta eficiência",
+    title: "Motores monofásicos",
     description:
-      "Pensados para reduzir o consumo de energia sem abrir mão de potência, nossos motores de alta eficiência utilizam materiais e processos que minimizam perdas térmicas e mecânicas. Essa combinação resulta em economia real na conta de energia ao longo de toda a vida útil do equipamento, sem comprometer a durabilidade. Uma escolha certeira para indústrias que buscam reduzir custos operacionais mantendo a mesma capacidade produtiva.",
+      "Selecionados para oferecer alto rendimento e confiabilidade em redes elétricas monofásicas, os motores do nosso catálogo são a solução ideal para equipamentos comerciais, agrícolas e industriais de menor porte. Com estrutura robusta e excelente torque de partida, garantem operação estável e contínua mesmo sob variações de carga. Uma escolha prática e eficiente para quem busca máxima produtividade e facilidade de instalação.",
+    specs: ["Potências de 0,5 CV a 3 CV", "Opções de 2 e 4 polos"]
   },
   {
-    id: "marathon",
-    title: "Motores blindados de alta resistência",
+    id: "starter-switches",
+    title: "Chaves de partida",
     description:
-      "Construídos para enfrentar poeira, umidade e ambientes agressivos, os motores blindados da nossa linha oferecem proteção reforçada contra os principais fatores que comprometem a vida útil de um motor elétrico. Vedações especiais e carcaças de alta resistência garantem operação segura mesmo nas condições mais adversas. Uma escolha certeira para plantas industriais expostas a intempéries ou processos corrosivos.",
-  },
+      "Projetadas para garantir a proteção e o acionamento seguro de motores elétricos, as chaves de partida do nosso catálogo evitam sobrecargas e picos de corrente que comprometem a vida útil do equipamento. Disponibilizamos modelos em estoque equipados com contatores e relés de sobrecarga de alta precisão, oferecendo instalação simplificada e máxima confiabilidade. Uma escolha indispensável para manter a segurança operacional na sua indústria.",
+    specs: ["Potências de 0,16 CV a 10 CV", "Tensões: 220 V e 380 V"]
+  }
 ];

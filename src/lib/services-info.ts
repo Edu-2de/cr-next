@@ -1,7 +1,6 @@
-import maintenanceImg from "@/assets/images/service-maintenance.jpg";
 import diagnosticsImg from "@/assets/images/service-diagnostics.jpg";
-import detailImg from "@/assets/images/service-detail.jpg";
-import installationImg from "@/assets/images/service-installation.jpg";
+import maintenanceImg from "@/assets/images/service-maintenance.jpg";
+import saleImg from "@/assets/images/service-sale.jpg";
 
 export type Service = { id: string; src: typeof maintenanceImg; title: string; description: string };
 
@@ -9,29 +8,23 @@ export const SERVICES: Service[] = [
   {
     id: "maintenance",
     src: maintenanceImg,
-    title: "Manutenção e reforma",
+    title: "Assistência Técnica"
+,
     description:
-      "Desmontagem completa para inspeção, reparo e reforma de motores de grande porte, com laudo técnico detalhado de cada etapa. Substituição de rolamentos, bobinas e componentes desgastados por peças originais ou equivalentes homologadas, sempre respeitando as especificações do fabricante. Testes finais de vibração, temperatura e isolamento garantem que o motor volte a operar com a mesma confiabilidade de um equipamento novo.",
+      "Como assistência técnica especializada, disponibilizamos a linha completa de peças de reposição originais para toda a linha de motores da marca Mercosul (antiga Eberle). Conhecidos por carregar um dos nomes mais tradicionais do setor elétrico, os motores Mercosul oferecem a maior garantia de qualidade do mercado, sendo 100% testados e validados em laboratório. Garantimos que cada componente fornecido cumpra rigorosamente as normas técnicas de performance, entregando a durabilidade e a segurança que a sua indústria necessita",
   },
   {
     id: "diagnostics",
     src: diagnosticsImg,
-    title: "Testes e diagnóstico",
+    title: "Recuperação e Rebobinagem",
     description:
-      "Equipamentos de teste elétrico de última geração para identificar falhas com precisão, antes que se tornem uma parada não programada. Análise de resistência de isolamento, corrente de fuga e resposta em frequência revelam problemas internos invisíveis a uma inspeção visual. Cada diagnóstico gera um relatório claro, com recomendação objetiva de reparo, reforma ou substituição.",
+      "Oferecemos serviços especializados de rebobinagem, reforma e recuperação técnica para motores elétricos e geradores de todas as potências e portes. Em nossa oficina própria, unimos equipamentos de alta precisão a uma equipe de técnicos altamente qualificados para realizar diagnósticos detalhados, testes rigorosos e processos que restauram o desempenho original do equipamento. Cada serviço é entregue com a reconhecida garantia CR Mesquita & Cia Ltda., assegurando confiabilidade, eficiência energética e máxima vida útil operacional para o seu patrimônio.",
   },
   {
     id: "detail-engineering",
-    src: detailImg,
-    title: "Engenharia de detalhe",
+    src: saleImg,
+    title: "Pós-Venda",
     description:
-      "Conhecimento técnico aprofundado de cada componente interno do motor, do enrolamento ao sistema de refrigeração, aplicado em projetos de retrofit e otimização de eficiência energética. Nossa equipe avalia o histórico operacional do equipamento e propõe ajustes de engenharia sob medida, sem depender de soluções genéricas de catálogo. O resultado é um motor mais eficiente, mais silencioso e com vida útil estendida.",
-  },
-  {
-    id: "installation",
-    src: installationImg,
-    title: "Instalação e comissionamento",
-    description:
-      "Montagem, alinhamento a laser e comissionamento completo de motores e bombas em plantas industriais, seguindo rigorosamente as normas técnicas vigentes. Acompanhamento presencial da partida inicial, com registro de todos os parâmetros elétricos e mecânicos relevantes para a operação segura do equipamento. Suporte contínuo nas primeiras horas de funcionamento, garantindo uma transição tranquila até a operação plena.",
+      "O nosso compromisso com a sua indústria vai muito além da entrega do equipamento ou da conclusão do serviço. Oferecemos um suporte técnico contínuo e um atendimento pós-venda verdadeiramente dedicado, pronto para solucionar dúvidas, orientar sobre o plano de manutenção preventiva e acompanhar o desempenho dos seus motores e geradores no dia a dia. Com a CR Mesquita, você conta com um parceiro presente, focado em assegurar o perfeito funcionamento do seu maquinário e em evitar paradas imprevistas na sua produção",
   },
 ];

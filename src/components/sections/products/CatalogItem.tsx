@@ -1,6 +1,6 @@
-import { tv } from "tailwind-variants";
 import { Text } from "@/components/ui/Text";
 import type { CatalogProduct } from "@/lib/products-info";
+import { tv } from "tailwind-variants";
 
 type CatalogItemProps = {
   product: CatalogProduct;
@@ -20,6 +20,7 @@ const catalogItemStyles = tv({
     rowHeight: "overflow-hidden",
     rowInner: "pt-4",
     description: "max-w-2xl sm:text-lg",
+    specs: "mt-4 flex max-w-2xl flex-col gap-1.5 sm:mt-5",
     titleButton: "block w-full text-left",
   },
   variants: {
@@ -40,7 +41,9 @@ export function CatalogItem({
   rowHeightRef,
   rowInnerRef,
 }: CatalogItemProps) {
-  const { row, content, rowHeight, rowInner, description, titleButton } = catalogItemStyles({ first: index === 0 });
+  const { row, content, rowHeight, rowInner, description, specs, titleButton } = catalogItemStyles({
+    first: index === 0,
+  });
 
   return (
     <div className={row()}>
@@ -60,8 +63,18 @@ export function CatalogItem({
             <Text as="p" size="base" leading="relaxed" color="inkMuted" className={description()}>
               {product.description}
             </Text>
+            {product.specs.length > 0 && (
+              <ul className={specs()}>
+                {product.specs.map((item) => (
+                  <Text as="li" key={item} size="lg" color="inkFaint" >
+                    {item}
+                  </Text>
+                ))}
+              </ul>
+            )}
           </div>
         </div>
+
       </div>
     </div>
   );

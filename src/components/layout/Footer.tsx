@@ -1,4 +1,3 @@
-import { tv } from "tailwind-variants";
 import { Text } from "@/components/ui/Text";
 import {
   ADDRESS_CITY,
@@ -11,10 +10,10 @@ import {
   WHATSAPP_HREF,
   WHATSAPP_NUMBER,
 } from "@/lib/business-info";
+import { tv } from "tailwind-variants";
 
 const FOOTER_LINKS = [
   { label: "Início", href: "#top" },
-  { label: "Engenharia", href: "#engineering" },
   { label: "Produtos", href: "#products" },
   { label: "Serviços", href: "#services" },
   { label: "Sobre", href: "#about" },

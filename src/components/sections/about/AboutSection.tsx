@@ -1,12 +1,12 @@
 "use client";
 
+import { Container } from "@/components/ui/Container";
+import { Text } from "@/components/ui/Text";
 import Image from "next/image";
 import { useRef } from "react";
 import { tv } from "tailwind-variants";
-import { Container } from "@/components/ui/Container";
-import { Text } from "@/components/ui/Text";
-import { STAT_TEXT, useAboutAnimations } from "./useAboutAnimations";
 import { FactoryLocation } from "./FactoryLocation";
+import { STAT_TEXT, useAboutAnimations } from "./useAboutAnimations";
 
 import logoImg from "@/assets/images/logo.png";
 
@@ -113,15 +113,12 @@ export function AboutSection() {
           </Text>
           <div className={introParagraphs()}>
             <Text as="p" variant="lead" color="whiteMuted">
-              Somos a CR Mesquita, uma empresa de Porto Alegre, RS, dedicada à reforma e
-              manutenção de motores e bombas elétricas industriais. Há mais de 50 anos
-              acompanhamos a indústria gaúcha, unindo experiência prática e rigor técnico em cada
-              equipamento que passa pelas nossas mãos.
+              Sediada em Porto Alegre/RS, a CR Mesquita é referência na venda de motores elétricos, peças de reposição, assistência técnica Mercosul e na recuperação e rebobinagem de motores e geradores de todas as potências.
+
+
             </Text>
             <Text as="p" variant="lead" color="whiteMuted">
-              Do diagnóstico técnico completo ao comissionamento final, cuidamos de cada etapa com
-              a mesma atenção — testes, reforma, alinhamento e acompanhamento de partida. O
-              objetivo é sempre o mesmo: garantir que a operação do cliente nunca precise parar.
+              Nossa jornada começou em abril de 1975, focada na prestação de serviços especializados de rebobinagem. Com o crescimento e a confiança do mercado, em 2010 ampliamos nossa atuação para a venda direta de equipamentos e peças, estruturando um dos estoques mais completos da região para pronto atendimento.
             </Text>
           </div>
         </div>
@@ -147,9 +144,7 @@ export function AboutSection() {
               {CONSOLIDATED_TITLE}
             </Text>
             <Text as="p" variant="lead" color="whiteMuted" className={consolidatedParagraph()}>
-              Somos uma empresa consolidada há mais de 50 anos no mercado, com uma reputação
-              construída junto à indústria gaúcha através da qualidade técnica e da confiança de
-              quem já trabalhou com a gente.
+              Somos uma empresa com mais de meio século de atuação, construindo uma sólida reputação na indústria gaúcha baseada em rigor técnico, excelência em serviços e na confiança de quem conhece o nosso trabalho.
             </Text>
           </div>
         </div>
@@ -165,8 +160,7 @@ export function AboutSection() {
             />
           </div>
           <Text as="p" variant="lead" align="justify" color="whiteMuted" className={logoCaption()}>
-            Fundada em 1975, a CR Mesquita carrega até hoje o selo de mais de 50 anos de história na
-            indústria gaúcha.
+            Tradição e excelência técnica desde 1975 a serviço da indústria gaúcha.
           </Text>
         </div>
 
@@ -175,9 +169,14 @@ export function AboutSection() {
             {FACTORY_TITLE}
           </Text>
           <Text as="p" variant="lead" color="whiteMuted" className={factoryParagraph()}>
-            Temos uma fábrica própria em Porto Alegre, equipada com maquinário e equipe
-            especializada para reformar, testar e comissionar motores e bombas elétricas de
-            qualquer porte — sem depender de terceiros em nenhuma etapa do processo.
+            Nossa estrutura conta com oficina própria e infraestrutura completa em Porto Alegre. Realizamos testes rigorosos e reformas em motores de todos os portes com equipe 100% dedicada, assegurando agilidade e precisão em todo o processo. Venha conhecer nossa estrutura e ver de perto o padrão do nosso trabalho!
+
+            Endereço: Av. Maranhão, 48 - São Geraldo, Porto Alegre - RS | CEP 90230-040
+
+            Segunda a Quinta-feira: 07h30 às 12h00 | 13h05 às 17h30
+            Sexta-feira: 07h30 às 12h00 | 13h05 às 16h55
+
+
           </Text>
         </div>
       </div>
