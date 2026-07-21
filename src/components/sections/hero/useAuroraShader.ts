@@ -28,6 +28,7 @@ export function useAuroraShader(
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
+    const auroraRoot = canvas.parentElement;
 
     const gl = canvas.getContext("webgl2", { antialias: false, alpha: false });
     if (!gl || gl.isContextLost()) return;
@@ -77,6 +78,9 @@ export function useAuroraShader(
     }
 
     function handlePointerMove(e: PointerEvent) {
+      // Paused (mid-transition or past it) means non-interactive too — a
+      // stray pointermove shouldn't nudge the frozen frame.
+      if (activeRef?.current === false) return;
       const rect = canvas!.getBoundingClientRect();
       quickX((e.clientX - rect.left) / rect.width);
       quickY(1 - (e.clientY - rect.top) / rect.height);
@@ -107,6 +111,7 @@ export function useAuroraShader(
     let raf = 0;
     let last = performance.now();
     let elapsed = 0;
+    let hidden = false;
 
     function frame(now: number) {
       if (gl!.isContextLost()) return;
@@ -114,8 +119,27 @@ export function useAuroraShader(
       const dt = Math.min((now - last) / 1000, 0.05);
       last = now;
 
-      // Skip the draw once the hero has scrolled out of view.
-      if (activeRef?.current === false) {
+      // Two thresholds, not one:
+      // - `activeRef` (set by Hero.tsx) flips the moment the reveal
+      //   transition starts. Paused just skips advancing time/drawing, so
+      //   the canvas keeps showing its last rendered frame — a static
+      //   aurora, not a blank/black one — and stops reacting to the
+      //   pointer (see handlePointerMove above).
+      // - Only once genuinely scrolled well past the hero do we drop the
+      //   fixed root from compositing entirely (visibility: hidden).
+      //   Chrome otherwise keeps painting this full-viewport WebGL layer
+      //   under every section below the hero for the rest of the page.
+      //   This is deliberately later than the pause point — it's a
+      //   compositing optimization for once the opaque next section has
+      //   fully covered it, not part of the visual freeze.
+      const shouldHide = window.scrollY > window.innerHeight * 1.15;
+      if (shouldHide !== hidden) {
+        hidden = shouldHide;
+        if (auroraRoot) auroraRoot.style.visibility = hidden ? "hidden" : "";
+      }
+
+      const paused = activeRef?.current === false;
+      if (hidden || paused) {
         raf = requestAnimationFrame(frame);
         return;
       }

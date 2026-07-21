@@ -17,8 +17,21 @@ export function Hero() {
     // fast/eased (Lenis) scroll gesture settles without firing another
     // event, leaving the Aurora canvas frozen on whatever frame it stopped
     // drawing on.
+    //
+    // Pause as soon as the reveal transition starts (not at 1.15 viewport
+    // heights) — the shader draw + pointer interactivity kept running for
+    // most of the transition scroll distance, competing with Chrome's
+    // sticky/compositing work for that same stretch and reading as jank.
+    // Freezing immediately leaves Aurora static (last frame + hidden, so it
+    // stops receiving pointer events too) through the whole transition and
+    // after. Hysteresis (pause later than resume) avoids flicker from
+    // Lenis's fractional settling right at the boundary.
+    const PAUSE_AT = 16;
+    const RESUME_AT = 4;
     function updateActive() {
-      activeRef.current = window.scrollY < window.innerHeight * 1.15;
+      const y = window.scrollY;
+      if (activeRef.current && y > PAUSE_AT) activeRef.current = false;
+      else if (!activeRef.current && y < RESUME_AT) activeRef.current = true;
     }
     updateActive();
     gsap.ticker.add(updateActive);
