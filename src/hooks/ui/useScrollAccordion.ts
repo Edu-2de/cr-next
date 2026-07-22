@@ -5,7 +5,15 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 gsap.registerPlugin(ScrollTrigger);
 
 const HEIGHT_DURATION = 0.7;
-const HEIGHT_EASE = "power2.inOut";
+// Gentler than power2 — a pronounced ease-out tail on `height` alone,
+// with nothing else visibly still changing at that point, is what read as
+// "stalls right before it finishes opening": the content's own opacity
+// tween used to finish well before the box did (see the mismatched
+// duration note below), so for the last ~30% of the reveal the only thing
+// happening on screen was the box's own deceleration curve — plainly
+// visible and easy to mistake for a hitch even though no frame was
+// actually dropped.
+const HEIGHT_EASE = "power1.inOut";
 const REVEAL_DURATION = 0.6;
 const REVEAL_EASE = "power3.out";
 
@@ -84,20 +92,43 @@ export function useScrollAccordion(itemCount: number, scrollDriven: boolean) {
 
   // Expand/collapse only — the title reveal itself is driven by openItem
   // above, decoupled from activeIndex.
+  //
+  // Only the row that closed and the row that opened actually change —
+  // animate just those two instead of looping every item. Looping all of
+  // them re-read `inner.scrollHeight` and started a (no-op, but not free)
+  // height tween on every already-settled row on every single activation;
+  // each `height` write forces a layout recalc, and on Chrome that reflow
+  // cost stacked with whatever else is running (e.g. Header's own per-frame
+  // layout reads) read as the accordion opening in one jump instead of
+  // animating.
+  const prevActiveIndexRef = useRef(activeIndex);
   useEffect(() => {
-    for (let i = 0; i < itemCount; i++) {
+    const prevActive = prevActiveIndexRef.current;
+    prevActiveIndexRef.current = activeIndex;
+    if (prevActive === activeIndex) return;
+
+    for (const i of [prevActive, activeIndex]) {
       const row = rowHeightRefs.current[i];
       const inner = rowInnerRefs.current[i];
       const titleWrap = titleWrapRefs.current[i];
       if (!row || !inner) continue;
       const isActive = i === activeIndex;
       gsap.to(row, { height: isActive ? inner.scrollHeight : 0, duration: HEIGHT_DURATION, ease: HEIGHT_EASE });
-      gsap.to(inner, { opacity: isActive ? 1 : 0, duration: HEIGHT_DURATION * 0.7, ease: "power1.out" });
+      // Opening: kept in sync with the height tween's own full duration —
+      // finishing the fade early (the old `* 0.7`) left the box's own
+      // ease-out tail as the only thing still visibly moving, reading as a
+      // stall. Closing keeps the shorter fade since the content is already
+      // invisible well before the box finishes collapsing anyway.
+      gsap.to(inner, {
+        opacity: isActive ? 1 : 0,
+        duration: isActive ? HEIGHT_DURATION : HEIGHT_DURATION * 0.7,
+        ease: "power1.out",
+      });
       if (titleWrap) {
         gsap.to(titleWrap, { opacity: isActive ? 1 : 0.3, duration: HEIGHT_DURATION * 0.7, ease: "power1.out" });
       }
     }
-  }, [activeIndex, itemCount]);
+  }, [activeIndex]);
 
   return { wrapperRef, activeIndex, rowHeightRefs, rowInnerRefs, titleWrapRefs, titleRefs, openItem };
 }

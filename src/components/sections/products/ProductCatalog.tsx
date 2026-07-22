@@ -38,7 +38,7 @@ export function ProductCatalog({ products }: { products: CatalogProduct[] }) {
       product={product}
       index={i}
       isActive={i === activeIndex}
-      onSelect={isDesktop ? undefined : () => openItem(i)}
+      onSelect={() => openItem(i)}
       titleWrapRef={(el) => {
         titleWrapRefs.current[i] = el;
       }}
@@ -65,7 +65,12 @@ export function ProductCatalog({ products }: { products: CatalogProduct[] }) {
 
   return (
     <div ref={wrapperRef} className={wrapper()} style={{ height: `${100 + products.length * SCROLL_PER_ITEM_VH}vh` }}>
-      <div className={sticky()}>
+      {/* contain:layout — this box's own size never depends on its
+          children (fixed h-screen), so a row's height tween below never
+          needs to affect anything outside it. Without this, Chrome doesn't
+          know that and re-checks layout impact beyond this box on every
+          single frame of the tween; Firefox doesn't pay the same tax. */}
+      <div className={sticky()} style={{ contain: "layout" }}>
         <div className={inner()}>
           {items}
           <div className={divider()} />

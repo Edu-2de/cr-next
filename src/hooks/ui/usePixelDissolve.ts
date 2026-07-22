@@ -55,12 +55,29 @@ export function usePixelDissolve(
   }, [bandRef]);
 
   useEffect(() => {
+    // Guarded two ways, both required — this ran unconditionally on every
+    // tick forever (even scrolled far away, even idle), rewriting every
+    // cell's background-color every single frame:
+    // 1. Skip the whole pass when scroll progress hasn't changed (idle,
+    //    off-trigger) — `onUpdate` only fires progressRef to a new value
+    //    while actually scrolling within this band's range.
+    // 2. Per-cell, compare against a plain JS-tracked last-applied color,
+    //    not `el.style.backgroundColor` read back — that getter normalizes
+    //    to `"rgb(...)"`, never equal to the hex it was set to, so the old
+    //    `!==` guard here never matched and rewrote all ~126 cells anyway.
+    let lastProgress = -1;
+    const appliedColors: (string | undefined)[] = [];
     function tick() {
       const progress = progressRef.current;
+      if (progress === lastProgress) return;
+      lastProgress = progress;
       cellRefs.current.forEach((el, i) => {
         if (!el) return;
         const color = progress >= thresholds[i] ? toColor : fromColor;
-        if (el.style.backgroundColor !== color) el.style.backgroundColor = color;
+        if (appliedColors[i] !== color) {
+          appliedColors[i] = color;
+          el.style.backgroundColor = color;
+        }
       });
     }
     gsap.ticker.add(tick);

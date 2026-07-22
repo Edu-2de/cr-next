@@ -35,7 +35,19 @@ export function useHeaderController() {
   const lenis = useLenis();
 
   useEffect(() => {
+    // Throttled to ~12Hz (every 5th tick): `elementFromPoint` and the two
+    // `getBoundingClientRect` calls below each force a synchronous layout
+    // recalc. Header is always mounted, so at 60fps this ran globally on
+    // every single frame — competing with any other section's own
+    // layout-writing animation (e.g. the products accordion's `height`
+    // tween) for a forced-layout slot, which Chrome charges far more for
+    // than Firefox. The nav highlight/theme doesn't need per-frame
+    // precision, so sampling it this much less often removes that
+    // contention with no visible cost.
+    let tick = 0;
     function update() {
+      tick++;
+      if (tick % 5 !== 0) return;
       const el = document.elementFromPoint(window.innerWidth / 2, 120);
       const themed = el?.closest("[data-theme]");
       // Looked up separately: nested cards carry their own data-theme inside
